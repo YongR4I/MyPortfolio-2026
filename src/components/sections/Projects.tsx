@@ -6,11 +6,8 @@
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-20 border-b">
-      <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold">Projects Section</h2>
-        {/* Konten projects akan ditempatkan di sini */}
-      </div>
+    <section id="projects" className="h-screen w-full bg-amber-900 border-b border-amber-800">
+      {/* Full screen empty block */}
     </section>
   );
 }

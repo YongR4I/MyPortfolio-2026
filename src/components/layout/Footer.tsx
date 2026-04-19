@@ -6,8 +6,8 @@
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 py-8 text-center border-t mt-auto">
-      <p>Footer Section</p>
+    <footer className="h-screen w-full bg-gray-950">
+      {/* Full screen empty block */}
     </footer>
   );
 }
