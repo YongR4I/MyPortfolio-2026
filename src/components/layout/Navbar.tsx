@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-6 flex items-center justify-between">
+      <nav className="absolute top-0 left-0 w-full z-50 px-6 md:px-10 py-6 flex items-center justify-between">
         {/* Logo */}
         <div className="text-white text-xl font-bold tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
           LOGO

@@ -4,8 +4,8 @@ import Preloader from "@/components/layout/Preloader";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 
 export const metadata: Metadata = {
-  title: "Portfolio | Raihan Daffa",
-  description: "Web Designer & Content Creator Portfolio",
+  title: "Raihan Daffa - Portfolio",
+  description: "Web Developer Portfolio",
 };
 
 export default function RootLayout({

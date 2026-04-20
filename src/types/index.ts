@@ -12,6 +12,7 @@ export interface ServiceType {
 
 export interface ProjectType {
   id: number;
+  slug: string;
   title: string;
   description: string;
   techStack: string[];

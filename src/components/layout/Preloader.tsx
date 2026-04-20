@@ -11,14 +11,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Preloader() {
   const [isVisible, setIsVisible] = useState(true);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     // Timer untuk menyembunyikan preloader setelah animasi selesai
     const timer = setTimeout(() => {
       setIsVisible(false);
-    }, 2000);
+    }, 1500);
 
     // Kunci scroll saat preloader aktif
     if (isVisible) {
@@ -33,8 +31,6 @@ export default function Preloader() {
     };
   }, [isVisible]);
 
-  if (!mounted) return null; // Avoid rendering on server to prevent mismatch
-
   return (
     <AnimatePresence mode="wait">
       {isVisible && (
@@ -46,7 +42,7 @@ export default function Preloader() {
           transition={{ 
             duration: 0.8, 
             ease: [0.85, 0, 0.15, 1], // Custom cubic-bezier for smooth slide up
-            delay: 1.2 // Reduced for better flow
+            delay: 0.5 // Reduced for faster transition
           }}
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#FF442B]"
         >
@@ -57,7 +53,7 @@ export default function Preloader() {
               transition={{ 
                 duration: 0.8, 
                 ease: [0.33, 1, 0.68, 1],
-                delay: 0.5 // Delay sedikit sebelum teks muncul sesuai request
+                delay: 0.2 // Reduced from 0.5 for immediate text appearance
               }}
               className="text-white font-bold tracking-tighter"
               style={{

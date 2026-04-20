@@ -75,7 +75,7 @@ export default function About() {
       ref={containerRef}
       className="relative w-full overflow-hidden"
       style={{
-        backgroundColor: '#1A1A1A',
+        backgroundColor: '#18181B',
         paddingTop: 'clamp(60px, 8vw, 120px)',
         paddingBottom: 'clamp(60px, 8vw, 120px)',
         paddingLeft: 'clamp(24px, 5vw, 80px)',
@@ -191,7 +191,7 @@ export default function About() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: '1.5px',
+          height: '0.5px',
           backgroundColor: '#666666',
         }}
       />
