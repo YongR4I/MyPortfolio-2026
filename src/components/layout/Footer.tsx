@@ -16,23 +16,23 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-white pt-20 pb-6 px-6 md:px-12 flex flex-col justify-between font-inter text-black">
-      <div className="flex flex-col md:flex-row justify-between w-full mx-auto items-start md:items-end mb-20 gap-16 md:gap-0">
+    <footer className="relative w-full min-h-[100svh] bg-white pt-16 md:pt-20 pb-6 px-6 md:px-12 flex flex-col justify-between font-inter text-black z-50 rounded-t-[30px] md:rounded-t-[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.2)] mt-auto">
+      <div className="flex flex-col md:flex-row justify-between w-full mx-auto items-start md:items-end mb-16 md:mb-20 gap-12 md:gap-0">
 
         {/* Left Section - Contact Info */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col">
-            <h2 className="text-[#6E6E6E] text-4xl md:text-[40px] font-semibold tracking-tight">
+            <h2 className="text-[#6E6E6E] text-3xl md:text-[40px] font-semibold tracking-tight">
               Stay Connected
             </h2>
             <div className="relative inline-block w-fit">
               <a
                 href="mailto:Sayhi@raihandaffa.com"
-                className="text-black text-4xl md:text-[40px] font-semibold tracking-tight relative z-10"
+                className="text-black text-2xl sm:text-3xl md:text-[40px] font-semibold tracking-tight relative z-10"
               >
                 Sayhi@raihandaffa.com
               </a>
-              <div className="absolute bottom-1 left-0 w-full h-[2px] bg-black"></div>
+              <div className="absolute bottom-0 md:bottom-1 left-0 w-full h-[2px] bg-black"></div>
             </div>
           </div>
 
@@ -73,18 +73,18 @@ export default function Footer() {
       </div>
 
       {/* Big RAIHAN Text Section */}
-      <div className="w-full flex flex-col items-center mt-auto">
-        <div className="w-[98%] border-t-[0.5px] border-[#B3B3B3]"></div>
-        
-        <h1 className="text-[80px] sm:text-[120px] md:text-[200px] lg:text-[250px] font-extrabold text-black leading-none text-center tracking-tighter my-2 md:my-0 w-full overflow-hidden flex justify-center uppercase">
-          <span className="-ml-4 md:-ml-8 lg:-ml-12">Raihan</span>
+      <div className="w-full flex flex-col items-center mt-auto md:mt-0">
+        <div className="w-full md:w-[98%] border-t-[0.5px] border-[#B3B3B3]"></div>
+
+        <h1 className="text-[60px] sm:text-[100px] md:text-[160px] lg:text-[250px] font-extrabold text-black leading-[0.8] md:leading-none text-center tracking-tighter my-6 md:my-2 w-full overflow-hidden flex justify-center uppercase">
+          <span className="-ml-2 md:-ml-8 lg:-ml-12">Raihan</span>
         </h1>
-        
-        <div className="w-[98%] border-b-[0.5px] border-[#B3B3B3] mb-6 md:mb-8"></div>
+
+        <div className="w-full md:w-[98%] border-b-[0.5px] border-[#B3B3B3] mb-6 md:mb-8"></div>
       </div>
 
       {/* Bottom Footer Info */}
-      <div className="flex justify-between items-center w-[98%] mx-auto text-[12px] text-black font-medium">
+      <div className="flex flex-col md:flex-row justify-between items-center w-full md:w-[98%] mx-auto text-[12px] text-black font-medium gap-4 md:gap-0">
         <p>Copyright © Raihan 2025</p>
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

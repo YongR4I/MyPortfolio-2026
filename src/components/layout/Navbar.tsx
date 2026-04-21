@@ -9,14 +9,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import Link from 'next/link';
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: 'Home', id: '01', href: '#hero' },
-    { name: 'About', id: '02', href: '#about' },
-    { name: 'Services', id: '03', href: '#services' },
-    { name: 'Project', id: '04', href: '#projects' },
+    { name: 'Home', id: '01', href: '/' },
+    { name: 'About', id: '02', href: '/about' },
+    { name: 'Services', id: '03', href: '/#services' },
+    { name: 'Project', id: '04', href: '/projects' },
   ];
 
   return (
@@ -31,33 +33,34 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-12">
           <div className="flex items-center gap-8">
             {navItems.map((item) => (
-              <motion.a
+              <motion.div
                 key={item.id}
-                href={item.href}
-                className="group flex items-start gap-1 text-sm text-neutral-100 hover:text-white transition-colors duration-300"
+                className="group flex items-start gap-1 text-sm text-neutral-100 hover:text-white transition-colors duration-300 cursor-pointer"
                 style={{ fontFamily: 'var(--font-inter)' }}
                 initial="initial"
                 whileHover="hover"
               >
-                <div className="relative h-5 overflow-hidden">
-                  <motion.div
-                    variants={{
-                      initial: { y: 0 },
-                      hover: { y: '-50%' }
-                    }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                <Link href={item.href} className="flex items-start gap-1">
+                  <div className="relative h-5 overflow-hidden">
+                    <motion.div
+                      variants={{
+                        initial: { y: 0 },
+                        hover: { y: '-50%' }
+                      }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    >
+                      <span className="block h-5 font-medium tracking-wide">{item.name}</span>
+                      <span className="block h-5 font-medium tracking-wide text-[#FF4D00]">{item.name}</span>
+                    </motion.div>
+                  </div>
+                  <span
+                    className="text-[10px] font-medium opacity-50 -mt-1"
+                    style={{ fontFamily: 'var(--font-mono)' }}
                   >
-                    <span className="block h-5 font-medium tracking-wide">{item.name}</span>
-                    <span className="block h-5 font-medium tracking-wide text-[#FF4D00]">{item.name}</span>
-                  </motion.div>
-                </div>
-                <span 
-                  className="text-[10px] font-medium opacity-50 -mt-1" 
-                  style={{ fontFamily: 'var(--font-mono)' }}
-                >
-                  {item.id}
-                </span>
-              </motion.a>
+                    {item.id}
+                  </span>
+                </Link>
+              </motion.div>
             ))}
           </div>
 
@@ -119,29 +122,33 @@ export default function Navbar() {
           >
             <div className="flex flex-col items-center gap-6">
               {navItems.map((item) => (
-                <motion.a
+                <motion.div
                   key={item.id}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-start gap-2 text-2xl text-neutral-400 hover:text-white transition-colors"
+                  className="flex items-start gap-2 text-2xl text-neutral-400 hover:text-white transition-colors cursor-pointer"
                   style={{ fontFamily: 'var(--font-inter)' }}
                   initial="initial"
                   whileHover="hover"
                 >
-                  <div className="relative h-8 overflow-hidden">
-                    <motion.div
-                      variants={{
-                        initial: { y: 0 },
-                        hover: { y: '-50%' }
-                      }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    >
-                      <span className="block h-8 font-bold tracking-tight uppercase">{item.name}</span>
-                      <span className="block h-8 font-bold tracking-tight uppercase text-[#FF4D00]">{item.name}</span>
-                    </motion.div>
-                  </div>
-                  <span className="text-xs font-medium opacity-50" style={{ fontFamily: 'var(--font-mono)' }}>{item.id}</span>
-                </motion.a>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-start gap-2"
+                  >
+                    <div className="relative h-8 overflow-hidden">
+                      <motion.div
+                        variants={{
+                          initial: { y: 0 },
+                          hover: { y: '-50%' }
+                        }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      >
+                        <span className="block h-8 font-bold tracking-tight uppercase">{item.name}</span>
+                        <span className="block h-8 font-bold tracking-tight uppercase text-[#FF4D00]">{item.name}</span>
+                      </motion.div>
+                    </div>
+                    <span className="text-xs font-medium opacity-50" style={{ fontFamily: 'var(--font-mono)' }}>{item.id}</span>
+                  </Link>
+                </motion.div>
               ))}
             </div>
 

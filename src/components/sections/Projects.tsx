@@ -75,7 +75,7 @@ const ProjectCard = ({
         </div>
 
         {/* Right: Description Card */}
-        <div className="cursor-none w-full lg:flex-1 h-auto lg:h-[600px]">
+        <div className="cursor-none w-full lg:flex-1 h-auto lg:h-[600px] relative">
           <div className="cursor-none flex flex-col h-full p-6 lg:p-10 rounded-2xl border border-white/10 bg-[#18181B] shadow-2xl">
             {/* Year using DM Mono */}
             <p className="font-mono text-white mb-3 md:mb-6 tracking-wider text-sm md:text-base pointer-events-none">
@@ -106,25 +106,7 @@ const ProjectCard = ({
             </div>
           </div>
 
-          {/* Mobile Liquid Glass Button - Positioned absolute to the Description Card */}
-          <div className="lg:hidden absolute bottom-6 right-6 pointer-events-auto z-10">
-            <Link
-              href={project.link || '#'}
-              className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] hover:bg-white/20 transition-all duration-300"
-              aria-label="Visit Site"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="transform rotate-[-45deg]"
-              >
-                <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </Link>
-          </div>
+          {/* Mobile Liquid Glass Button - Removed as requested */}
         </div>
       </motion.div>
     </div>
