@@ -10,16 +10,26 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-  const navItems = [
+  let navItems = [
     { name: 'Home', id: '01', href: '/' },
     { name: 'About', id: '02', href: '/about' },
     { name: 'Services', id: '03', href: '/#services' },
     { name: 'Project', id: '04', href: '/projects' },
   ];
+
+  if (pathname !== '/') {
+    navItems = navItems.filter(item => item.name !== 'Services');
+    navItems = navItems.map((item, index) => ({
+      ...item,
+      id: `0${index + 1}`
+    }));
+  }
 
   return (
     <>
