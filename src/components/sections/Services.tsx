@@ -19,32 +19,32 @@ const services = [
     title: "Web Development",
     description: "Building high-performance websites with clean code and modern tech. Focused on speed, scalability, and seamless digital experiences.",
     features: [
-      "Custom Web Application",
-      "Responsive & Performance",
-      "Modern Tech Stack (React/Next.js)",
-      "SEO & Accessibility"
+      { title: "Custom Web Application" },
+      { title: "Responsive & Performance" },
+      { title: "Interactive User Experience" },
+      { title: "Full-Stack Implementation" }
     ]
   },
   {
     id: "02",
-    title: "Creative Strategy",
-    description: "Solving complex business challenges through strategic creative thinking. Effective communication to bridge the gap between ideas and results.",
+    title: "Growth Strategy",
+    description: "Digital Growth & Strategy Bridging the gap between technical infrastructure and cinematic brand storytelling.",
     features: [
-      "Business Problem Solving",
-      "Public Speaking & Presentation",
-      "Strategic Storytelling",
-      "Solution Architecture"
+      { title: "Operational Digitalization" },
+      { title: "Brand Authority Design" },
+      { title: "Technical Sales & Conversion" },
+      { title: "Solution Architecture" }
     ]
   },
   {
     id: "03",
-    title: "Content Strategist",
-    description: "Driving organic growth through trend-driven and purposeful content. Crafting stories that capture attention and build brand authority.",
+    title: "UI/UX Engineering",
+    description: "UI/UX Design Engineering Crafting high-end digital interfaces where technical logic meets premium aesthetics.",
     features: [
-      "Social Media Branding",
-      "Short-form Video Production",
-      "Visual Content Creation",
-      "Organic Growth Strategy"
+      { title: "Scalable Design Systems" },
+      { title: "High-Fidelity Interface" },
+      { title: "Interactive Prototyping" },
+      { title: "Developer-Ready Handoff" }
     ]
   }
 ];
@@ -115,12 +115,19 @@ export default function Services() {
                   {service.features.map((feature, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between py-6 border-b border-white/20 group cursor-default transition-all duration-300"
+                      className="flex items-start justify-between py-6 border-b border-white/20 group cursor-default transition-all duration-300"
                     >
-                      <span className="text-white/90 font-inter font-semibold text-[16px] md:text-[18px] group-hover:text-white transition-colors duration-300">
-                        {feature}
-                      </span>
-                      <div className="text-white/50 font-mono text-[14px] group-hover:text-[#FF442B] transition-colors duration-300">
+                      <div className="flex flex-col gap-3 max-w-[90%]">
+                        <span className="text-white/90 font-inter font-semibold text-[16px] md:text-[18px] group-hover:text-white transition-colors duration-300 leading-snug">
+                          {feature.title}
+                        </span>
+                        {(feature as any).description && (
+                          <span className="text-white/60 font-inter text-[14px] md:text-[15px] leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                            {(feature as any).description}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-white/50 font-mono text-[14px] group-hover:text-[#FF442B] transition-colors duration-300 mt-1">
                         {String(i + 1).padStart(2, '0')}
                       </div>
                     </div>

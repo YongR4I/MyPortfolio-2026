@@ -37,78 +37,57 @@ const ProjectCard = ({
       ref={cardRef}
       className="h-screen w-full sticky top-0 flex items-center justify-center"
     >
-      <motion.div
-        style={{ scale }}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        // cursor-none digunakan agar cursor bawaan hilang saat hover pada area card ini
-        className="cursor-none flex flex-col lg:flex-row justify-between gap-4 md:gap-6 w-full max-w-[1250px] mx-auto p-4 md:p-6 origin-top bg-[#18181B] rounded-[2rem]"
-      >
-        {/* Left: Image Container */}
-        <div className="cursor-none w-full lg:w-[800px] h-[35vh] lg:h-[600px] relative rounded-2xl overflow-hidden border border-white/10 bg-[#18181B] shadow-2xl">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={project.imagePlaceholder}
-            alt={project.title}
-            className="object-cover w-full h-full pointer-events-none"
-          />
-
-          {/* Mobile Liquid Glass Button - Positioned absolute bottom right inside the image */}
-          <div className="lg:hidden absolute bottom-4 right-4 pointer-events-auto z-10">
-            <Link
-              href={project.link || '#'}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-['Inter_Display'] text-sm font-medium shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] hover:bg-white/20 transition-all duration-300"
-            >
-              Visit Site
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="transform rotate-[-45deg]"
-              >
-                <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </Link>
+      <Link href="/projects" className="block w-full max-w-[1250px] mx-auto p-4 md:p-6 cursor-none">
+        <motion.div
+          style={{ scale }}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+          className="flex flex-col lg:flex-row justify-between gap-4 md:gap-6 w-full origin-top bg-[#18181B] rounded-[2rem]"
+        >
+          {/* Left: Image Container */}
+          <div className="w-full lg:w-[800px] h-[35vh] lg:h-[600px] relative rounded-2xl overflow-hidden border border-white/10 bg-[#18181B] shadow-2xl">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={project.imagePlaceholder}
+              alt={project.title}
+              className="object-cover w-full h-full pointer-events-none"
+            />
           </div>
-        </div>
 
-        {/* Right: Description Card */}
-        <div className="cursor-none w-full lg:flex-1 h-auto lg:h-[600px] relative">
-          <div className="cursor-none flex flex-col h-full p-6 lg:p-10 rounded-2xl border border-white/10 bg-[#18181B] shadow-2xl">
-            {/* Year using DM Mono */}
-            <p className="font-mono text-white mb-3 md:mb-6 tracking-wider text-sm md:text-base pointer-events-none">
-              (2024)
-            </p>
+          {/* Right: Description Card */}
+          <div className="w-full lg:flex-1 h-auto lg:h-[600px] relative">
+            <div className="flex flex-col h-full p-6 lg:p-10 rounded-2xl border border-white/10 bg-[#18181B] shadow-2xl">
+              {/* Year using DM Mono */}
+              <p className="font-mono text-white mb-3 md:mb-6 tracking-wider text-sm md:text-base pointer-events-none">
+                (2024)
+              </p>
 
-            {/* Title using Inter Display Bold */}
-            <h3 className="font-['Inter_Display'] font-bold text-3xl md:text-4xl lg:text-[44px] leading-tight mb-4 md:mb-8 text-white pointer-events-none">
-              {project.title}
-            </h3>
+              {/* Title using Inter Display Bold */}
+              <h3 className="font-['Inter_Display'] font-bold text-3xl md:text-4xl lg:text-[44px] leading-tight mb-4 md:mb-8 text-white pointer-events-none">
+                {project.title}
+              </h3>
 
-            {/* Description using Inter Display Regular */}
-            <p className="hidden lg:block font-['Inter_Display'] font-normal text-[#999999] text-base leading-relaxed flex-grow pointer-events-none">
-              For {project.title}, we crafted a design that honors the rich heritage of classic cars while adding a modern twist. Combining timeless elegance with sleek, contemporary elements, we created an experience that appeals to both enthusiasts and newcomers, celebrating the past with a fresh perspective.
-            </p>
+              {/* Description using Inter Display Regular */}
+              <p className="hidden lg:block font-['Inter_Display'] font-normal text-[#999999] text-base leading-relaxed flex-grow pointer-events-none">
+                For {project.title}, we crafted a design that honors the rich heritage of classic cars while adding a modern twist. Combining timeless elegance with sleek, contemporary elements, we created an experience that appeals to both enthusiasts and newcomers, celebrating the past with a fresh perspective.
+              </p>
 
-            {/* List / Table */}
-            <div className="flex flex-col mt-auto pt-4 lg:pt-6 pointer-events-none">
-              <div className="border-b-[0.5px] border-white/10 pb-2 mb-2 lg:py-4 lg:mb-0">
-                <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Landing Page</p>
-              </div>
-              <div className="border-b-[0.5px] border-white/10 pb-2 mb-2 lg:py-4 lg:mb-0">
-                <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Mobile App</p>
-              </div>
-              <div className="border-b-[0.5px] border-white/10 pb-2 lg:py-4">
-                <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Redesign</p>
+              {/* List / Table */}
+              <div className="flex flex-col mt-auto pt-4 lg:pt-6 pointer-events-none">
+                <div className="border-b-[0.5px] border-white/10 pb-2 mb-2 lg:py-4 lg:mb-0">
+                  <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Landing Page</p>
+                </div>
+                <div className="border-b-[0.5px] border-white/10 pb-2 mb-2 lg:py-4 lg:mb-0">
+                  <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Mobile App</p>
+                </div>
+                <div className="border-b-[0.5px] border-white/10 pb-2 lg:py-4">
+                  <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Redesign</p>
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Mobile Liquid Glass Button - Removed as requested */}
-        </div>
-      </motion.div>
+        </motion.div>
+      </Link>
     </div>
   );
 };
@@ -156,7 +135,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="bg-[#18181B] relative w-full pb-[10vh] cursor-default"
+      className="bg-[#18181B] relative w-full pb-[20vh] cursor-default"
       onMouseLeave={() => setIsHovered(false)}
     >
 
