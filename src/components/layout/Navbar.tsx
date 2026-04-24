@@ -11,10 +11,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTransition } from '@/context/TransitionContext';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { navigateWithTransition } = useTransition();
+
+  const handleNavClick = (href: string) => {
+    // If it's a hash link on the current page, or just a hash link generally, don't use transition
+    if (href.startsWith('#') || (href.startsWith('/#') && pathname === '/')) {
+      const target = href.includes('#') ? href.split('#')[1] : null;
+      if (target) {
+        window.dispatchEvent(new CustomEvent('lenis-scroll-to', { detail: { target: `#${target}` } }));
+      }
+      return;
+    }
+    navigateWithTransition(href);
+  };
 
   let navItems = [
     { name: 'Home', id: '01', href: '/' },
@@ -50,7 +64,14 @@ export default function Navbar() {
                 initial="initial"
                 whileHover="hover"
               >
-                <Link href={item.href} className="flex items-start gap-1">
+                <Link 
+                  href={item.href}
+                  className="flex items-start gap-1"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.href);
+                  }}
+                >
                   <div className="relative h-5 overflow-hidden">
                     <motion.div
                       variants={{
@@ -75,7 +96,10 @@ export default function Navbar() {
           </div>
 
           {/* CTA Button - Desktop */}
-          <Link href="/contact">
+          <div 
+            onClick={() => handleNavClick('/contact')}
+            className="cursor-pointer"
+          >
             <motion.button
               className="relative flex items-center bg-[#E5E5E5] rounded-full p-1 group overflow-hidden"
               initial="rest"
@@ -106,7 +130,7 @@ export default function Navbar() {
                 Get in touch
               </motion.span>
             </motion.button>
-          </Link>
+          </div>
         </div>
 
         {/* Mobile Toggle Button (+) */}
@@ -172,8 +196,12 @@ export default function Navbar() {
                 >
                   <Link
                     href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-start gap-1 text-white hover:text-white/80 transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsMenuOpen(false);
+                      handleNavClick(item.href);
+                    }}
+                    className="flex items-start gap-1 text-white hover:text-white/80 transition-colors cursor-pointer"
                   >
                     <span className="text-3xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-inter)' }}>
                       {item.name}
@@ -193,7 +221,13 @@ export default function Navbar() {
               transition={{ delay: 0.7 }}
               className="px-6 pb-12 mt-8"
             >
-              <Link href="/contact" onClick={() => setIsMenuOpen(false)}>
+              <div 
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  handleNavClick('/contact');
+                }}
+                className="cursor-pointer"
+              >
                 <button
                   className="flex items-center bg-white rounded-full p-1 hover:bg-neutral-100 transition-colors inline-flex w-full"
                 >
@@ -207,7 +241,7 @@ export default function Navbar() {
                     Get in touch
                   </span>
                 </button>
-              </Link>
+              </div>
             </motion.div>
 
           </motion.div>

@@ -9,55 +9,74 @@ import { motion, AnimatePresence } from 'framer-motion';
  * Menggunakan background #FF442B dan teks "Raihan" dengan animasi slide up.
  */
 
+import { useTransition } from '@/context/TransitionContext';
+
 export default function Preloader() {
+  const { isTransitioning } = useTransition();
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Fail-safe: Hide after max 2s (dikurangi dari 4s agar tidak ngelag lama)
-    const fallbackTimer = setTimeout(() => {
-      setIsVisible(false);
-    }, 2000);
-
-    const handleLoad = () => {
-      // Lebih cepat hilangnya (800ms) untuk kesan yang lebih responsif
-      setTimeout(() => setIsVisible(false), 800);
-    };
-
-    // Pengecekan lebih sederhana untuk status dokumen
+    // Initial Load Logic
     if (document.readyState === 'complete') {
-      handleLoad();
+      setTimeout(() => setIsVisible(false), 800);
     } else {
+      const handleLoad = () => setTimeout(() => setIsVisible(false), 800);
       window.addEventListener('load', handleLoad);
+      return () => window.removeEventListener('load', handleLoad);
     }
+  }, []);
 
+  // Update visibility based on global transition state
+  useEffect(() => {
+    if (isTransitioning) {
+      setIsVisible(true);
+    } else {
+      // Only hide if we are not in the initial load phase (or just always attempt to hide after a delay)
+      const timer = setTimeout(() => setIsVisible(false), 400); 
+      return () => clearTimeout(timer);
+    }
+  }, [isTransitioning]);
+
+  useEffect(() => {
+    // Scroll lock management
     if (isVisible) {
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      document.body.style.touchAction = 'none';
+      window.dispatchEvent(new CustomEvent('lock-scroll'));
     }
 
     return () => {
-      window.removeEventListener('load', handleLoad);
-      clearTimeout(fallbackTimer);
-      document.body.style.overflow = '';
+      // Clean up on unmount or state change
+      if (!isVisible) {
+        // handleExitComplete logic will handle the unlock for AnimatePresence
+      }
     };
   }, [isVisible]);
 
+  const handleExitComplete = () => {
+    document.body.style.overflow = '';
+    document.body.style.touchAction = '';
+    window.dispatchEvent(new CustomEvent('unlock-scroll'));
+  };
+
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
       {isVisible && (
         <motion.div
           key="preloader"
           initial={{ y: 0 }}
           animate={{ y: 0 }}
-          exit={{ y: "-100vh" }}
+          exit={{ y: "-100%" }}
           transition={{ 
             duration: 0.8, 
             ease: [0.85, 0, 0.15, 1],
             delay: 0.5
           }}
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#FF442B]"
-          style={{ willChange: 'transform' }}
+          style={{ 
+            willChange: 'transform',
+            touchAction: 'none'
+          }}
         >
           <div className="overflow-hidden">
             <motion.h1

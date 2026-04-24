@@ -43,10 +43,23 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     animationFrameId = requestAnimationFrame(raf);
 
+    // Lock/Unlock handlers
+    const lockScroll = () => {
+      lenis.stop();
+    };
+    const unlockScroll = () => {
+      lenis.start();
+    };
+
+    window.addEventListener('lock-scroll', lockScroll);
+    window.addEventListener('unlock-scroll', unlockScroll);
+
     return () => {
       cancelAnimationFrame(animationFrameId);
       lenis.destroy();
       lenisRef.current = null;
+      window.removeEventListener('lock-scroll', lockScroll);
+      window.removeEventListener('unlock-scroll', unlockScroll);
     };
   }, []);
 
@@ -56,6 +69,22 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       lenisRef.current.scrollTo(0, { immediate: true });
     }
   }, [pathname]);
+
+  // Handle custom scroll-to events (e.g., from Navbar)
+  useEffect(() => {
+    const handleScrollTo = (e: any) => {
+      const target = e.detail?.target;
+      if (target && lenisRef.current) {
+        lenisRef.current.scrollTo(target, { 
+          duration: 2.5, 
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) 
+        });
+      }
+    };
+
+    window.addEventListener('lenis-scroll-to', handleScrollTo);
+    return () => window.removeEventListener('lenis-scroll-to', handleScrollTo);
+  }, []);
 
   return <>{children}</>;
 }

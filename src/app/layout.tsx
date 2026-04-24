@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Web Developer Portfolio",
 };
 
+import { TransitionProvider } from "@/context/TransitionContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,10 +23,12 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <Preloader />
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <TransitionProvider>
+          <Preloader />
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+        </TransitionProvider>
       </body>
     </html>
   );

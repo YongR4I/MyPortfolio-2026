@@ -13,9 +13,15 @@ import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } fr
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const [mounted, setMounted] = React.useState(false);
+  const [shouldAnimate, setShouldAnimate] = React.useState(false);
   
   React.useEffect(() => {
     setMounted(true);
+    const hasSeen = sessionStorage.getItem('hasSeenHeroEntrance');
+    if (!hasSeen) {
+      setShouldAnimate(true);
+      sessionStorage.setItem('hasSeenHeroEntrance', 'true');
+    }
   }, []);
 
   // Motion values for mouse position
@@ -29,6 +35,19 @@ export default function Hero() {
   // Map mouse position to subtle parallax ranges
   const textMoveX = useTransform(springX, (val) => val * -0.005);
   const textMoveY = useTransform(springY, (val) => val * -0.005);
+
+  // Typing Reveal + Blur settings for a high-end feel
+  const entranceInitial = { 
+    opacity: 0, 
+    filter: 'blur(15px)', 
+    clipPath: 'inset(0 100% 0 0)',
+    y: 0 
+  };
+  const entranceTransition = (delay: number) => ({
+    duration: 1.5,
+    ease: [0.22, 1, 0.36, 1], // expo out
+    delay: delay
+  });
 
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -53,6 +72,7 @@ export default function Hero() {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      style={{ isolation: 'isolate' }}
       className="relative h-screen w-full bg-[#8D8D8D] overflow-hidden flex flex-col justify-end"
     >
 
@@ -74,13 +94,18 @@ export default function Hero() {
       </motion.div>
 
       <div className="relative z-10 w-full h-full max-w-[1440px] mx-auto px-6 md:px-10 pb-8 md:pb-12 flex flex-col md:flex-row md:items-end justify-between pointer-events-none">
-        {/* Left Side: Copyright & Main Title - Subtle Counter-Movement */}
         <motion.div 
-          className="flex flex-col mt-auto pointer-events-auto"
-          style={{ x: textMoveX, y: textMoveY }}
+          className="flex flex-col mt-auto pointer-events-auto mix-blend-difference"
+          style={{ x: textMoveX, y: textMoveY, willChange: 'transform' }}
         >
           {/* Copyright Section */}
-          <div className="flex items-center gap-3 mb-2 md:mb-4">
+          <motion.div 
+            initial={shouldAnimate ? entranceInitial : false}
+            animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0% 0 0)', y: 0 }}
+            transition={entranceTransition(shouldAnimate ? 1.6 : 0) as any}
+            className="flex items-center gap-3 mb-2 md:mb-4"
+            style={{ willChange: 'filter, opacity, clip-path', transform: 'translateZ(0)' }}
+          >
             <span 
               className="text-white font-medium" 
               style={{ 
@@ -90,37 +115,53 @@ export default function Hero() {
             >
               ©2026
             </span>
-          </div>
+          </motion.div>
 
           {/* Main Title Section */}
           <div className="flex items-start">
-            <h1
-              className="text-white font-bold leading-[0.8] tracking-tighter mix-blend-difference"
+            <motion.h1
+              initial={shouldAnimate ? entranceInitial : false}
+              animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0% 0 0)', y: 0 }}
+              transition={entranceTransition(shouldAnimate ? 1.8 : 0) as any}
+              className="text-white font-bold leading-[0.8] tracking-tighter"
               style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: 'clamp(80px, 16vw, 228px)',
-                marginLeft: '-4px'
+                marginLeft: '-4px',
+                willChange: 'filter, opacity, clip-path',
+                transform: 'translateZ(0)'
               }}
             >
               Raihan
-            </h1>
-            <span
-              className="text-[#FF4D00] font-bold"
+            </motion.h1>
+            <motion.span
+              initial={shouldAnimate ? entranceInitial : false}
+              animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0% 0 0)', y: 0 }}
+              transition={entranceTransition(shouldAnimate ? 2.0 : 0) as any}
+              className="text-[#FF4D00] font-bold mix-blend-difference"
               style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: 'clamp(60px, 12vw, 160px)',
                 lineHeight: '0.8',
                 marginTop: 'clamp(4px, 1vw, 10px)',
-                marginLeft: 'clamp(4px, 1vw, 10px)'
+                marginLeft: 'clamp(4px, 1vw, 10px)',
+                willChange: 'filter, opacity, clip-path',
+                transform: 'translateZ(0)'
               }}
             >
               *
-            </span>
+            </motion.span>
           </div>
         </motion.div>
 
         {/* Right Side: Description */}
-        <div className="md:max-w-[320px] lg:max-w-[400px] text-left md:text-right mt-6 md:mt-0 md:mb-12 pointer-events-auto">
+        <motion.div 
+          initial={shouldAnimate ? entranceInitial : false}
+          animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0% 0 0)', y: 0 }}
+          transition={entranceTransition(shouldAnimate ? 2.2 : 0) as any}
+          className="md:max-w-[320px] lg:max-w-[400px] text-left md:text-right mt-6 md:mt-0 md:mb-12 pointer-events-auto mix-blend-difference"
+          style={{ willChange: 'filter, opacity, clip-path', transform: 'translateZ(0)' }}
+        >
           <p
             className="text-white font-bold text-sm md:text-base lg:text-lg leading-snug tracking-tight"
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -130,8 +171,8 @@ export default function Hero() {
             building seamless interfaces and<br className="hidden md:block"/>
             high-impact digital content.
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
-}
+}

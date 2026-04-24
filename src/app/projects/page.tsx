@@ -1,14 +1,10 @@
 "use client";
 
-/**
- * src/app/projects/page.tsx
- * Projects page – hero banner full-screen sesuai design Figma.
- */
-
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const projectsData = [
   {
@@ -51,10 +47,31 @@ const projectsData = [
 
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState('All');
-  
+  const [hasSeen, setHasSeen] = useState(false);
+
+  useEffect(() => {
+    const seen = sessionStorage.getItem('hasSeenHeroEntrance');
+    if (!seen) {
+      setHasSeen(false);
+      sessionStorage.setItem('hasSeenHeroEntrance', 'true');
+    } else {
+      setHasSeen(true);
+    }
+  }, []);
+
+  const shouldPlay = !hasSeen;
+
+  // Typing Reveal + Blur settings
+  const entranceInitial = { opacity: 0, filter: 'blur(15px)', clipPath: 'inset(0 100% 0 0)' };
+  const entranceTransition = (delay: number) => ({
+    duration: 1.5,
+    ease: [0.22, 1, 0.36, 1],
+    delay: delay
+  });
+
   const filteredProjects = activeFilter === 'All' 
     ? projectsData 
-    : projectsData.filter(project => project.types.includes(activeFilter));
+    : projectsData.filter((project: any) => project.types.includes(activeFilter));
 
   const filters = ['All', 'Frontend', 'Backend'];
 
@@ -86,36 +103,53 @@ export default function ProjectsPage() {
 
         {/* Teks "Project" di pojok kiri bawah */}
         <div className="absolute bottom-0 left-0 z-20 flex flex-col pb-4 pl-6 md:pl-[60px]">
-          <span
+          <motion.span
+            initial={shouldPlay ? entranceInitial : false}
+            animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0% 0 0)' }}
+            transition={entranceTransition(shouldPlay ? 1.6 : 0) as any}
             className="text-white text-sm md:text-base font-semibold mb-1 tracking-wide"
-            style={{ fontFamily: 'var(--font-mono, monospace)' }}
+            style={{ 
+              fontFamily: 'var(--font-mono, monospace)',
+              willChange: 'filter, opacity, clip-path',
+              transform: 'translateZ(0)'
+            }}
           >
             © 2026
-          </span>
+          </motion.span>
           <div className="flex items-start">
-            <h1
+            <motion.h1
+              initial={shouldPlay ? entranceInitial : false}
+              animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0% 0 0)' }}
+              transition={entranceTransition(shouldPlay ? 1.8 : 0) as any}
               className="text-white font-bold leading-none tracking-tighter"
               style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: 'clamp(56px, 12vw, 148px)',
                 lineHeight: '0.88',
                 marginLeft: '-4px',
+                willChange: 'filter, opacity, clip-path',
+                transform: 'translateZ(0)'
               }}
             >
               Project
-            </h1>
-            <span
+            </motion.h1>
+            <motion.span
+              initial={shouldPlay ? entranceInitial : false}
+              animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0% 0 0)' }}
+              transition={entranceTransition(shouldPlay ? 1.9 : 0) as any}
               className="text-[#FF4D00] font-bold"
               style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: 'clamp(42px, 9vw, 110px)',
                 lineHeight: '0.8',
                 marginTop: 'clamp(2px, 0.5vw, 6px)',
-                marginLeft: 'clamp(2px, 0.5vw, 6px)'
+                marginLeft: 'clamp(2px, 0.5vw, 6px)',
+                willChange: 'filter, opacity, clip-path',
+                transform: 'translateZ(0)'
               }}
             >
               *
-            </span>
+            </motion.span>
           </div>
         </div>
       </section>
