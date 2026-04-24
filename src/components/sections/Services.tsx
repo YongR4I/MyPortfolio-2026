@@ -57,7 +57,7 @@ export default function Services() {
       {/* Label Header - Only one at the top of the entire section */}
       <div className="absolute top-12 left-6 lg:left-20 z-10">
         <span className="text-[#FF442B] font-inter text-[14px] uppercase tracking-wider">
-          // Service
+          {"//"} Service
         </span>
       </div>
 

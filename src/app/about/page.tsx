@@ -114,17 +114,17 @@ export default function AboutPage() {
             >
               <div className="md:w-[32%] md:pr-4">
                 <p>
-                 Currently pursuing a major in Software and Game Development at SMKN 1 Ciomas, I’ve spent my academic career diving deep into software architecture and programming logic. My journey is rooted in a passion for digital craftsmanship, where I constantly bridge the gap between back-end stability and front-end elegance.
+                 Currently pursuing a major in Software and Game Development at SMKN 1 Ciomas, I&apos;ve spent my academic career diving deep into software architecture and programming logic. My journey is rooted in a passion for digital craftsmanship, where I constantly bridge the gap between back-end stability and front-end elegance.
                 </p>
               </div>
               <div className="md:w-[32%] md:pr-4 mt-8 md:mt-0">
                 <p>
-                  Specialized in Frontend Development, I build responsive, mobile-first applications using React and Next.js. Beyond the code, I am a content creator focused on tech education—using storytelling to turn technical challenges into tangible solutions. I’m now looking to bring this blend of technical skill and creative strategy to a professional internship, transforming business needs into memorable digital experiences. 
+                  Specialized in Frontend Development, I build responsive, mobile-first applications using React and Next.js. Beyond the code, I am a content creator focused on tech education—using storytelling to turn technical challenges into tangible solutions. I&rsquo;m now looking to bring this blend of technical skill and creative strategy to a professional internship, transforming business needs into memorable digital experiences. 
                 </p>
               </div>
               <div className="md:w-[36%] flex justify-end items-end mt-12 md:mt-0">
                 <button className="px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] hover:bg-white/5 transition-colors">
-                  Let's Talk
+                  Let&apos;s Talk
                 </button>
               </div>
             </div>

@@ -83,7 +83,7 @@ export default function About() {
         paddingRight: 'clamp(24px, 5vw, 80px)',
       }}
     >
-      {/* // Intro Label - Top Left */}
+      {/* Intro Label - Top Left */}
       <span
         style={{
           fontFamily: "var(--font-inter)",
@@ -94,7 +94,7 @@ export default function About() {
           display: 'block',
         }}
       >
-        // Intro
+        {"//"} Intro
       </span>
 
       {/* Main Headline - SemiBold, centered container, text indented and left-aligned */}

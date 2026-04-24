@@ -129,7 +129,7 @@ export default function ProjectsPage() {
           {/* TITLE & LINE */}
           <div className="flex items-center gap-6 mb-12">
             <h2 className="text-white text-3xl md:text-[56px] tracking-tight font-medium" style={{ fontFamily: 'var(--font-inter)' }}>
-              Stuff I've built
+              Stuff I&apos;ve built
             </h2>
             <div className="flex-1 h-[1px] bg-white/20 mt-1 md:mt-2"></div>
           </div>

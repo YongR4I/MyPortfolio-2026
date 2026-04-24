@@ -172,7 +172,7 @@ export default function Projects() {
       {/* Label Header */}
       <div className="absolute top-12 left-6 md:left-6 lg:left-20 z-10">
         <span className="text-[#FF442B] font-['Inter_Display'] text-[14px] uppercase tracking-wider">
-          // Projects
+          {"//"} Projects
         </span>
       </div>
 
