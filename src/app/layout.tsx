@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Preloader from "@/components/layout/Preloader";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 
 export const metadata: Metadata = {
-  title: "Portfolio | Raihan Daffa",
-  description: "Web Designer & Content Creator Portfolio",
+  title: "Raihan Daffa - Portfolio",
+  description: "Web Developer Portfolio",
 };
-  
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,10 +18,13 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
-        {children}
+        <Preloader />
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

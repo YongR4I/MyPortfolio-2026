@@ -13,13 +13,17 @@ import Projects from "@/components/sections/Projects";
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen relative bg-black">
       <Navbar />
-      <Hero />
-      <About />
-      <Services />
-      <Projects />
-      <Footer />
+      <div className="relative z-10 bg-black">
+        <Hero />
+        <About />
+        <Services />
+        <Projects />
+      </div>
+      <div className="relative z-50 bg-transparent">
+        <Footer />
+      </div>
     </main>
   );
 }
