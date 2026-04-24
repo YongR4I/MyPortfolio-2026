@@ -27,23 +27,9 @@ export default function Hero() {
   const springY = useSpring(mouseY, { damping: 30, stiffness: 100 });
 
   // Map mouse position to subtle parallax ranges
-  const imageMoveX = useTransform(springX, (val) => val * 0.01);
-  const imageMoveY = useTransform(springY, (val) => val * 0.01);
   const textMoveX = useTransform(springX, (val) => val * -0.005);
   const textMoveY = useTransform(springY, (val) => val * -0.005);
 
-  // Spotlight Effect Calculation
-  const spotlightX = useTransform(springX, (val) => {
-    if (!sectionRef.current) return 0;
-    return val + sectionRef.current.clientWidth / 2;
-  });
-  const spotlightY = useTransform(springY, (val) => {
-    if (!sectionRef.current) return 0;
-    return val + sectionRef.current.clientHeight / 2;
-  });
-
-  // Dynamic radial gradient template for the atmospheric "glow" - thickened as requested
-  const spotlightTransform = useMotionTemplate`radial-gradient(1200px circle at ${spotlightX}px ${spotlightY}px, rgba(255, 255, 255, 0.15), transparent 60%)`;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!sectionRef.current) return;
@@ -69,22 +55,17 @@ export default function Hero() {
       onMouseLeave={handleMouseLeave}
       className="relative h-screen w-full bg-[#8D8D8D] overflow-hidden flex flex-col justify-end"
     >
-      {/* Spotlight Overlay */}
-      <motion.div 
-        className="pointer-events-none absolute inset-0 z-20"
-        style={{ background: spotlightTransform }}
-      />
 
       {/* Background Image Container - Subtle Parallax */}
       <motion.div 
         className="absolute inset-0 z-0 w-full h-full flex items-end justify-center pointer-events-none"
-        style={{ scale: 1 }} // Removed x: imageMoveX, y: imageMoveY
       >
          <Image
-            src="/assets/Hero.png"   
+            src="/assets/New Hero.png"   
             alt="Hero Background Silhouette"
             fill
             priority
+            unoptimized
             className="object-cover object-bottom"
             style={{
               objectPosition: 'bottom center',
