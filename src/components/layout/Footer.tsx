@@ -11,8 +11,8 @@ export default function Footer() {
     { number: '01', name: 'Home', href: '#home' },
     { number: '02', name: 'About', href: '#about' },
     { number: '03', name: 'Service', href: '#services' },
-    { number: '04', name: 'Project', href: '#projects' },
-    { number: '05', name: 'Contact', href: '#contact' },
+    { number: '04', name: 'Project', href: '/projects' },
+    { number: '05', name: 'Contact', href: '/contact' },
   ];
 
   return (

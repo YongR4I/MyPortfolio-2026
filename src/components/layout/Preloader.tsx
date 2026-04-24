@@ -13,12 +13,23 @@ export default function Preloader() {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Timer untuk menyembunyikan preloader setelah animasi selesai
-    const timer = setTimeout(() => {
+    // Fail-safe: Hide after max 2s (dikurangi dari 4s agar tidak ngelag lama)
+    const fallbackTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 1500);
+    }, 2000);
 
-    // Kunci scroll saat preloader aktif
+    const handleLoad = () => {
+      // Lebih cepat hilangnya (800ms) untuk kesan yang lebih responsif
+      setTimeout(() => setIsVisible(false), 800);
+    };
+
+    // Pengecekan lebih sederhana untuk status dokumen
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
     if (isVisible) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -26,7 +37,8 @@ export default function Preloader() {
     }
 
     return () => {
-      clearTimeout(timer);
+      window.removeEventListener('load', handleLoad);
+      clearTimeout(fallbackTimer);
       document.body.style.overflow = '';
     };
   }, [isVisible]);
@@ -38,27 +50,29 @@ export default function Preloader() {
           key="preloader"
           initial={{ y: 0 }}
           animate={{ y: 0 }}
-          exit={{ y: "-100%" }}
+          exit={{ y: "-100vh" }}
           transition={{ 
             duration: 0.8, 
-            ease: [0.85, 0, 0.15, 1], // Custom cubic-bezier for smooth slide up
-            delay: 0.5 // Reduced for faster transition
+            ease: [0.85, 0, 0.15, 1],
+            delay: 0.5
           }}
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#FF442B]"
+          style={{ willChange: 'transform' }}
         >
           <div className="overflow-hidden">
             <motion.h1
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ 
                 duration: 0.8, 
                 ease: [0.33, 1, 0.68, 1],
-                delay: 0.2 // Reduced from 0.5 for immediate text appearance
+                delay: 0.2
               }}
               className="text-white font-bold tracking-tighter"
               style={{
                 fontFamily: 'var(--font-inter)',
-                fontSize: 'clamp(32px, 8vw, 64px)', // Ideal balanced size
+                fontSize: 'clamp(32px, 10vw, 80px)',
                 lineHeight: 1
               }}
             >

@@ -75,36 +75,38 @@ export default function Navbar() {
           </div>
 
           {/* CTA Button - Desktop */}
-          <motion.button 
-            className="relative flex items-center bg-[#E5E5E5] rounded-full p-1 group overflow-hidden"
-            initial="rest"
-            whileHover="hover"
-            animate="rest"
-          >
-            <motion.div 
-              className="absolute left-1 top-1 bottom-1 bg-[#FF4D00] rounded-full z-0"
-              variants={{
-                rest: { width: '40px' },
-                hover: { width: 'calc(100% - 8px)' }
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            />
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-full z-10 shrink-0">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
-                <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <motion.span 
-              className="relative text-sm font-medium pr-6 pl-2 z-10 whitespace-nowrap transition-colors duration-300" 
-              style={{ fontFamily: 'var(--font-inter)' }}
-              variants={{
-                rest: { color: "#000000" },
-                hover: { color: "#FFFFFF" }
-              }}
+          <Link href="/contact">
+            <motion.button
+              className="relative flex items-center bg-[#E5E5E5] rounded-full p-1 group overflow-hidden"
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
             >
-              Get in touch
-            </motion.span>
-          </motion.button>
+              <motion.div
+                className="absolute left-1 top-1 bottom-1 bg-[#FF4D00] rounded-full z-0"
+                variants={{
+                  rest: { width: '40px' },
+                  hover: { width: 'calc(100% - 8px)' }
+                }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              />
+              <div className="relative flex items-center justify-center w-10 h-10 rounded-full z-10 shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                  <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <motion.span
+                className="relative text-sm font-medium pr-6 pl-2 z-10 whitespace-nowrap transition-colors duration-300"
+                style={{ fontFamily: 'var(--font-inter)' }}
+                variants={{
+                  rest: { color: "#000000" },
+                  hover: { color: "#FFFFFF" }
+                }}
+              >
+                Get in touch
+              </motion.span>
+            </motion.button>
+          </Link>
         </div>
 
         {/* Mobile Toggle Button (+) */}
@@ -145,7 +147,7 @@ export default function Navbar() {
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between px-6 py-6 border-b border-white/20">
               <div className="text-white text-2xl font-black tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
-                VIPER
+                RAIHAN
               </div>
               <button 
                 onClick={() => setIsMenuOpen(false)}
@@ -185,26 +187,27 @@ export default function Navbar() {
             </div>
 
             {/* Mobile CTA */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
               className="px-6 pb-12 mt-8"
             >
-              <button 
-                className="flex items-center bg-white rounded-full p-1 hover:bg-neutral-100 transition-colors inline-flex"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#F03C2E]">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </div>
-                <span className="text-lg font-medium text-black px-6" style={{ fontFamily: 'var(--font-inter)' }}>
-                  Get in touch
-                </span>
-              </button>
+              <Link href="/contact" onClick={() => setIsMenuOpen(false)}>
+                <button
+                  className="flex items-center bg-white rounded-full p-1 hover:bg-neutral-100 transition-colors inline-flex w-full"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#F03C2E]">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-black px-6" style={{ fontFamily: 'var(--font-inter)' }}>
+                    Get in touch
+                  </span>
+                </button>
+              </Link>
             </motion.div>
 
           </motion.div>

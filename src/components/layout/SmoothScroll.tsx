@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import { usePathname } from 'next/navigation';
 
@@ -12,16 +12,24 @@ import { usePathname } from 'next/navigation';
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const lenisRef = useRef<Lenis | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
+    // Disable Lenis on mobile devices for better performance/native feel
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) return;
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.0, // Dipercepat sedikit dari 1.2
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
+      wheelMultiplier: 0.8, // Dikurangi agar scroll tidak terasa terlalu berat
+      touchMultiplier: 1.2, // Disamakan agar lebih native di touchpad/touchscreen
       infinite: false,
     });
 
