@@ -81,7 +81,7 @@ export default function Hero() {
         className="absolute inset-0 z-0 w-full h-full flex items-end justify-center pointer-events-none"
       >
          <Image
-            src="/assets/New Hero.png"   
+            src="/assets/Hero.png"   
             alt="Hero Background Silhouette"
             fill
             priority
@@ -93,7 +93,7 @@ export default function Hero() {
          />
       </motion.div>
 
-      <div className="relative z-10 w-full h-full max-w-[1440px] mx-auto px-6 md:px-10 pb-8 md:pb-12 flex flex-col md:flex-row md:items-end justify-between pointer-events-none">
+      <div className="relative z-10 w-full h-full max-w-[1440px] mx-auto px-6 md:px-10 pb-4 md:pb-6 flex flex-col md:flex-row md:items-end justify-between pointer-events-none">
         <motion.div 
           className="flex flex-col mt-auto pointer-events-auto mix-blend-difference"
           style={{ x: textMoveX, y: textMoveY, willChange: 'transform' }}
@@ -175,4 +175,4 @@ export default function Hero() {
       </div>
     </section>
   );
-}
+}

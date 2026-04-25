@@ -1,5 +1,8 @@
 "use client";
 
+import { useTransition } from "@/context/TransitionContext";
+import { usePathname } from "next/navigation";
+
 /**
  * src/components/layout/Footer.tsx
  * Fungsi: Komponen penutup di bagian paling bawah website.
@@ -7,10 +10,25 @@
  */
 
 export default function Footer() {
+  const { navigateWithTransition } = useTransition();
+  const pathname = usePathname();
+
+  const handleNavClick = (href: string) => {
+    // If it's a hash link on the current page, or just a hash link generally, don't use transition
+    if (href.startsWith('#') || (href.startsWith('/#') && pathname === '/')) {
+      const target = href.includes('#') ? href.split('#')[1] : null;
+      if (target) {
+        window.dispatchEvent(new CustomEvent('lenis-scroll-to', { detail: { target: `#${target}` } }));
+      }
+      return;
+    }
+    navigateWithTransition(href);
+  };
+
   const links = [
-    { number: '01', name: 'Home', href: '#home' },
-    { number: '02', name: 'About', href: '#about' },
-    { number: '03', name: 'Service', href: '#services' },
+    { number: '01', name: 'Home', href: '/' },
+    { number: '02', name: 'About', href: '/about' },
+    { number: '03', name: 'Service', href: '/#services' },
     { number: '04', name: 'Project', href: '/projects' },
     { number: '05', name: 'Contact', href: '/contact' },
   ];
@@ -27,10 +45,10 @@ export default function Footer() {
             </h2>
             <div className="relative inline-block w-fit">
               <a
-                href="mailto:Sayhi@raihandaffa.com"
+                href="mailto:raihandaffa.dev@gmail.com"
                 className="text-black text-2xl sm:text-3xl md:text-[40px] font-semibold tracking-tight relative z-10"
               >
-                Sayhi@raihandaffa.com
+                raihandaffa.dev@gmail.com
               </a>
               <div className="absolute bottom-0 md:bottom-1 left-0 w-full h-[2px] bg-black"></div>
             </div>
@@ -38,7 +56,10 @@ export default function Footer() {
 
           {/* CTA Button */}
           <div className="inline-block mt-4">
-            <button className="relative flex items-center bg-[#E5E5E5] rounded-full p-1 group overflow-hidden cursor-pointer w-fit pr-6">
+            <div 
+              onClick={() => handleNavClick('/contact')}
+              className="relative flex items-center bg-[#E5E5E5] rounded-full p-1 group overflow-hidden cursor-pointer w-fit pr-6"
+            >
               <div className="absolute left-1 top-1 bottom-1 bg-[#FF4D00] rounded-full z-0 w-10 group-hover:w-[calc(100%-8px)] transition-all duration-300 ease-out"></div>
               <div className="relative flex items-center justify-center w-10 h-10 rounded-full z-10 shrink-0">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
@@ -48,7 +69,7 @@ export default function Footer() {
               <span className="relative text-sm font-semibold pl-2 z-10 whitespace-nowrap text-black group-hover:text-white transition-colors duration-300">
                 Contact Now
               </span>
-            </button>
+            </div>
           </div>
         </div>
 
@@ -58,6 +79,10 @@ export default function Footer() {
             <a
               key={index}
               href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(link.href);
+              }}
               className={`flex items-center justify-between py-4 border-t-[0.5px] border-[#B3B3B3] group ${index === links.length - 1 ? 'border-b-[0.5px]' : ''}`}
             >
               <div className="flex gap-1 text-[12px] text-[#525252] group-hover:text-black transition-colors font-medium">

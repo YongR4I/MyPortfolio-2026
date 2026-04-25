@@ -14,43 +14,37 @@ import { useTransition } from '@/context/TransitionContext';
 export default function Preloader() {
   const { isTransitioning } = useTransition();
   const [isVisible, setIsVisible] = useState(true);
+  const [isFirstMount, setIsFirstMount] = useState(true);
 
   useEffect(() => {
     // Initial Load Logic
-    if (document.readyState === 'complete') {
-      setTimeout(() => setIsVisible(false), 800);
-    } else {
-      const handleLoad = () => setTimeout(() => setIsVisible(false), 800);
-      window.addEventListener('load', handleLoad);
-      return () => window.removeEventListener('load', handleLoad);
-    }
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+      // Wait for exit animation to complete before switching mount type
+      setTimeout(() => setIsFirstMount(false), 800);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   // Update visibility based on global transition state
   useEffect(() => {
     if (isTransitioning) {
       setIsVisible(true);
-    } else {
-      // Only hide if we are not in the initial load phase (or just always attempt to hide after a delay)
+    } else if (!isFirstMount) {
       const timer = setTimeout(() => setIsVisible(false), 400); 
       return () => clearTimeout(timer);
     }
-  }, [isTransitioning]);
+  }, [isTransitioning, isFirstMount]);
 
   useEffect(() => {
-    // Scroll lock management
     if (isVisible) {
       document.body.style.overflow = 'hidden';
       document.body.style.touchAction = 'none';
       window.dispatchEvent(new CustomEvent('lock-scroll'));
+    } else {
+      handleExitComplete();
     }
-
-    return () => {
-      // Clean up on unmount or state change
-      if (!isVisible) {
-        // handleExitComplete logic will handle the unlock for AnimatePresence
-      }
-    };
   }, [isVisible]);
 
   const handleExitComplete = () => {
@@ -60,17 +54,17 @@ export default function Preloader() {
   };
 
   return (
-    <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
+    <AnimatePresence mode="wait">
       {isVisible && (
         <motion.div
           key="preloader"
-          initial={{ y: 0 }}
+          initial={{ y: isFirstMount ? 0 : "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "-100%" }}
           transition={{ 
             duration: 0.8, 
             ease: [0.85, 0, 0.15, 1],
-            delay: 0.5
+            delay: isTransitioning ? 0 : 0.5
           }}
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#FF442B]"
           style={{ 
@@ -86,7 +80,7 @@ export default function Preloader() {
               transition={{ 
                 duration: 0.8, 
                 ease: [0.33, 1, 0.68, 1],
-                delay: 0.2
+                delay: isFirstMount ? 0.2 : 0.1
               }}
               className="text-white font-bold tracking-tighter"
               style={{

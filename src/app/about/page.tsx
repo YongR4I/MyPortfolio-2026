@@ -12,14 +12,19 @@ import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
 const HERO_HEIGHT = 360;
 
 export default function AboutPage() {
-  const { scrollYProgress } = useScroll();
-  const bottomScale = useTransform(scrollYProgress, [0.7, 1], [1.2, 1]);
+  const experienceRef = useRef<HTMLDivElement>(null);
+
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [hasSeen, setHasSeen] = useState(false);
+
+  const { scrollYProgress: aboutScrollProgress } = useScroll();
+  const bottomScale = useTransform(aboutScrollProgress, [0.7, 1], [1.2, 1]);
 
   useEffect(() => {
     const seen = sessionStorage.getItem('hasSeenHeroEntrance');
@@ -41,17 +46,55 @@ export default function AboutPage() {
     delay: delay
   });
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+
+  const certificates = [
+    {
+      title: "Fundamental Front-end Web Development",
+      company: "Codingcamp Powered By DBS",
+      year: "2026",
+      image: "/images/projectdummy.png",
+      link: "#"
+    },
+    {
+      title: "Front-End Web Development",
+      company: "Codingcamp Powered By DBS",
+      year: "2025",
+      image: "/images/projectdummy.png",
+      link: "#"
+    },
+    {
+      title: "React Developer Professional",
+      company: "Codingcamp Powered By DBS",
+      year: "2025",
+      image: "/images/projectdummy.png",
+      link: "#"
+    },
+    {
+      title: "UI/UX Design Specialist",
+      company: "Codingcamp Powered By DBS",
+      year: "2024",
+      image: "/images/projectdummy.png",
+      link: "#"
+    },
+    {
+      title: "Advanced JavaScript Programming",
+      company: "Codingcamp Powered By DBS",
+      year: "2024",
+      image: "/images/projectdummy.png",
+      link: "#"
+    }
+  ];
+
   return (
     <div className="relative bg-black text-white">
 
-      {/* ── Navbar ──
-          Diletakkan di flow normal agar ikut scroll naik. */}
+      {/* ── Navbar ── */}
       <Navbar />
 
-      {/* ── Hero ──
-          STICKY agar sangat smooth dan ringan.
-          Mobile: h-[60vh] (lebih tinggi agar proporsional di layar portrait)
-          Desktop: h-[360px] */}
+      {/* ── Hero ── */}
       <section
         className="sticky top-0 left-0 w-full overflow-hidden h-[60vh] md:h-[360px] z-[1]"
       >
@@ -120,17 +163,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Card ──
-          Di-render SELETAH hero, akan slide up saat di-scroll karena hero bersifat sticky.
-          Mobile: padding lebih kecil (px-6 py-12)
-          Desktop: padding lebih besar (md:px-10 md:py-[100px]) */}
+      {/* ── Card ── */}
       <section
         className="relative w-full bg-black min-h-screen z-10"
       >
         <div className="mx-auto max-w-[1280px] min-h-[720px] px-6 py-16 md:px-10 md:py-[100px]">
           <div className="max-w-[1050px] mx-auto mt-8 md:mt-12">
-
-            {/* ── Top Typography & Floated Image ── */}
             <h2
               className="text-white font-semibold tracking-tight mb-16 md:mb-24"
               style={{
@@ -139,13 +177,9 @@ export default function AboutPage() {
                 lineHeight: '1.08'
               }}
             >
-              <span className="hidden">
-                 {/* Spacer logic */}
-              </span>
               I’m a Software Engineering student and Frontend Developer dedicated to building high-performance web experiences. By blending technical logic with creative storytelling, I transform complex code into seamless, user-centric digital products that scale
             </h2>
 
-            {/* ── Bottom Text Columns ── */}
             <div
               className="flex flex-col md:flex-row justify-between text-[#A1A1AA] text-[13px] md:text-[14px] leading-relaxed tracking-normal"
               style={{ fontFamily: 'var(--font-inter)' }}
@@ -166,48 +200,268 @@ export default function AboutPage() {
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* ── Parallax Image Block ── */}
-      <div className="relative w-full h-[200vh] z-[5]">
-        <section className="sticky top-0 w-full h-screen z-[5] bg-black overflow-hidden">
-          <motion.div
-            className="relative w-full h-full origin-center"
-            style={{ scale: bottomScale }}
-          >
-            <Image
-              src="/images/Image About.png"
-              alt="About Middle Parallax Background"
-              fill
-              className="object-cover object-center"
-              quality={100}
-            />
-          </motion.div>
-        </section>
-      </div>
+      {/* ── Experience Section (Grid Design) ── */}
+      <section 
+        ref={experienceRef}
+        className="relative w-full bg-black z-10 py-24 md:py-32"
+      >
+        <div className="mx-auto max-w-[1280px] w-full px-6 md:px-10">
+          <div className="border-b border-[#333] pb-10 mb-16 md:mb-24">
+            <h2 className="text-white font-medium tracking-tight text-[32px] md:text-[40px]" style={{ fontFamily: 'var(--font-inter)' }}>
+              Experience
+            </h2>
+          </div>
 
-      {/* ── Certificates Page ── */}
-      <section className="relative w-full bg-black min-h-screen z-10 flex flex-col justify-center -mt-[100vh]">
-        <div className="mx-auto max-w-[1280px] w-full px-6 md:px-10 py-16 md:py-24">
+          <div className="space-y-32 md:space-y-48">
+            {/* Item 1: Codingcamp */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="grid grid-cols-1 md:grid-cols-12 gap-y-12 md:gap-x-12"
+            >
+              <div className="md:col-span-12 mb-8 md:mb-12">
+                <h3 className="text-white text-[42px] md:text-[56px] font-bold leading-none tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
+                  Codingcamp Powered By DBS
+                </h3>
+              </div>
+
+              <div className="md:col-span-3">
+                <p className="text-white text-base md:text-lg mb-4 font-medium" style={{ fontFamily: 'var(--font-inter)' }}>Student / Developer</p>
+                <span className="text-[#A1A1AA] text-sm md:text-base font-mono">Jan 2026 — May 2026</span>
+              </div>
+
+              <div className="md:col-span-4 grid grid-cols-2 gap-y-4 text-sm md:text-base" style={{ fontFamily: 'var(--font-inter)' }}>
+                <span className="text-[#696969]">Position</span>
+                <span className="text-white">DBS Foundation Tech Cohort</span>
+                
+                <span className="text-[#696969]">Industry</span>
+                <span className="text-white">Fintech / Edutech</span>
+                
+                <span className="text-[#696969]">Website</span>
+                <a 
+                  href="https://codingcamp.dicoding.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-white border-b border-white/20 hover:border-white transition-colors w-fit inline-flex items-center gap-1.5 whitespace-nowrap"
+                >
+                  codingcamp.dicoding.com ↗
+                </a>
+              </div>
+
+              <div className="md:col-span-5 space-y-6">
+                <p className="text-[#A1A1AA] text-lg leading-relaxed">
+                  Developed FinLitGo, a full-stack financial literacy app for Gen-Z using React 19, Vite, and Supabase, featuring AI-driven assistants.
+                </p>
+                <p className="text-[#A1A1AA] text-lg leading-relaxed">
+                  Implemented modern web architectures with Node.js/Express 5 and TailwindCSS 4, enhanced by smooth GSAP and Framer Motion animations.
+                </p>
+                <p className="text-[#A1A1AA] text-lg leading-relaxed">
+                  Collaborated in a high-performance technical team to solve complex problems through creative engineering and personal branding.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Item 2: Digital Creator */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+              className="grid grid-cols-1 md:grid-cols-12 gap-y-12 md:gap-x-12"
+            >
+              <div className="md:col-span-12 mb-8 md:mb-12">
+                <h3 className="text-white text-[42px] md:text-[56px] font-bold leading-none tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
+                  Independent Digital Product Creator
+                </h3>
+              </div>
+
+              <div className="md:col-span-3">
+                <p className="text-white text-base md:text-lg mb-4 font-medium" style={{ fontFamily: 'var(--font-inter)' }}>Digital Product Owner</p>
+                <span className="text-[#A1A1AA] text-sm md:text-base font-mono">May 2025 — Present</span>
+              </div>
+
+              <div className="md:col-span-4 grid grid-cols-2 gap-y-4 text-sm md:text-base" style={{ fontFamily: 'var(--font-inter)' }}>
+                <span className="text-[#696969]">Position</span>
+                <span className="text-white">Independent Creator</span>
+                
+                <span className="text-[#696969]">Location</span>
+                <span className="text-white">Remote</span>
+                
+                <span className="text-[#696969]">Industry</span>
+                <span className="text-white">SaaS / Digital Goods</span>
+                
+                <span className="text-[#696969]">Status</span>
+                <span className="text-white italic">Market Validated</span>
+              </div>
+
+              <div className="md:col-span-5 space-y-6">
+                <p className="text-[#A1A1AA] text-lg leading-relaxed">
+                  Built high-performance website templates and source codes reaching 50+ active users through technical education and presentations.
+                </p>
+                <p className="text-[#A1A1AA] text-lg leading-relaxed">
+                  Transformed real-world user pain points into practical digital solutions, achieving strong commercial sales conversions.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Item 3: Freelance */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+              className="grid grid-cols-1 md:grid-cols-12 gap-y-12 md:gap-x-12"
+            >
+              <div className="md:col-span-12 mb-8 md:mb-12">
+                <h3 className="text-white text-[42px] md:text-[56px] font-bold leading-none tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
+                  Creative Digital Strategist
+                </h3>
+              </div>
+
+              <div className="md:col-span-3">
+                <p className="text-white text-base md:text-lg mb-4 font-medium" style={{ fontFamily: 'var(--font-inter)' }}>Web Strategist</p>
+                <span className="text-[#A1A1AA] text-sm md:text-base font-mono">Sept 2025 — April 2026</span>
+              </div>
+
+              <div className="md:col-span-4 grid grid-cols-2 gap-y-4 text-sm md:text-base" style={{ fontFamily: 'var(--font-inter)' }}>
+                <span className="text-[#696969]">Position</span>
+                <span className="text-white">Full-stack Freelancer</span>
+                
+                <span className="text-[#696969]">Location</span>
+                <span className="text-white">Remote</span>
+                
+                <span className="text-[#696969]">Industry</span>
+                <span className="text-white">Creative Agency</span>
+                
+                <span className="text-[#696969]">Impact</span>
+                <span className="text-white italic">Digital Growth</span>
+              </div>
+
+              <div className="md:col-span-5 space-y-6">
+                <p className="text-[#A1A1AA] text-lg leading-relaxed">
+                  Digitalized local business operations for multiple brands, includingLor Coffee Shop through responsive web and branding solutions.
+                </p>
+                <p className="text-[#A1A1AA] text-lg leading-relaxed">
+                  Consulted on coherent brand identities for Lorin’s Shopee launch to build customer trust through technical and aesthetic excellence.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Certificates Section ── */}
+      <section 
+        className="relative w-full bg-black min-h-screen z-10 flex flex-col justify-center"
+        onMouseMove={handleMouseMove}
+      >
+        <div className="mx-auto max-w-[1280px] w-full px-6 md:px-10 py-16 md:py-24 relative">
           <h2 className="text-white font-medium tracking-tight text-[32px] md:text-[40px] mb-8 md:mb-10" style={{ fontFamily: 'var(--font-inter)' }}>
             Certificates
           </h2>
           
-          <div className="border-t border-[#333]">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex justify-between items-center py-6 md:py-8 border-b border-[#333]">
-                <h3 className="text-white/95 text-[22px] md:text-[28px] tracking-tight" style={{ fontFamily: 'var(--font-inter)' }}>
-                  Fundamental Front-end Web Development
+          <div className="border-t border-[#333] relative">
+            {certificates.map((cert, i) => (
+              <a 
+                key={i} 
+                href={cert.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-row justify-between items-center py-6 md:py-8 border-b border-[#333] cursor-pointer transition-colors duration-500 no-underline"
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <h3 
+                  className={`text-[18px] md:text-[28px] tracking-tight transition-colors duration-500 flex-1 pr-4 ${
+                    hoveredIndex === null ? 'text-white/95' : 
+                    hoveredIndex === i ? 'text-white' : 'text-[#444]'
+                  }`} 
+                  style={{ fontFamily: 'var(--font-inter)' }}
+                >
+                  {cert.title}
                 </h3>
-                <div className="flex flex-col text-right text-white font-medium text-lg md:text-[20px] leading-[1.05] tracking-tight">
-                  <span>20</span>
-                  <span>26</span>
+                
+                <div className="flex flex-row items-center gap-4 md:gap-12">
+                  <span className={`text-[11px] md:text-[16px] font-medium transition-colors duration-500 whitespace-nowrap ${
+                      hoveredIndex === null ? 'text-[#A1A1AA]' : 
+                      hoveredIndex === i ? 'text-[#FF4D00]' : 'text-[#222]'
+                    }`}
+                    style={{ fontFamily: 'var(--font-inter)' }}
+                  >
+                    {cert.company}
+                  </span>
+
+                  <div 
+                    className={`flex flex-col text-right font-medium text-base md:text-[20px] leading-[1.05] tracking-tight transition-colors duration-500 ${
+                      hoveredIndex === null ? 'text-white' : 
+                      hoveredIndex === i ? 'text-white' : 'text-[#444]'
+                    }`}
+                  >
+                    <span>{cert.year.slice(0, 2)}</span>
+                    <span>{cert.year.slice(2, 4)}</span>
+                  </div>
+
+                  {/* Arrow for Mobile/Hover */}
+                  <div className={`transition-all duration-500 ${
+                    hoveredIndex === i ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
+                  } md:block hidden`}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF4D00]">
+                      <path d="M7 17l10-10M7 7h10v10"/>
+                    </svg>
+                  </div>
+
+                  <div className="md:hidden block ml-2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                      <path d="M7 17l10-10M7 7h10v10"/>
+                    </svg>
+                  </div>
                 </div>
-              </div>
+              </a>
             ))}
+
+            {/* Hover Image Reveal - Desktop Only */}
+            <AnimatePresence>
+              {hoveredIndex !== null && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%', filter: 'blur(10px)' }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    filter: 'blur(0px)',
+                    left: mousePosition.x,
+                    top: mousePosition.y,
+                    transition: { 
+                      opacity: { duration: 0.3 },
+                      filter: { duration: 0.4 },
+                      scale: { type: 'spring', stiffness: 200, damping: 25 },
+                      left: { type: 'spring', stiffness: 150, damping: 20, mass: 0.5 },
+                      top: { type: 'spring', stiffness: 150, damping: 20, mass: 0.5 }
+                    }
+                  }}
+                  exit={{ opacity: 0, scale: 0.8, filter: 'blur(10px)', transition: { duration: 0.2 } }}
+                  className="fixed pointer-events-none z-[100] w-[400px] h-[250px] overflow-hidden rounded-xl shadow-2xl border border-white/10 hidden md:block"
+                  style={{ 
+                    left: mousePosition.x, 
+                    top: mousePosition.y,
+                    x: '-50%',
+                    y: '-50%'
+                  }}
+                >
+                  <Image
+                    src={certificates[hoveredIndex].image}
+                    alt={certificates[hoveredIndex].title}
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </section>

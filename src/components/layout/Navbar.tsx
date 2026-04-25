@@ -156,7 +156,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-[140] bg-black/60 backdrop-blur-sm md:hidden"
               onClick={() => setIsMenuOpen(false)}
             />
 
@@ -166,7 +166,7 @@ export default function Navbar() {
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed top-0 left-0 w-full h-auto pb-4 z-[100] bg-[#F03C2E] flex flex-col md:hidden shadow-2xl rounded-b-[2rem]"
+              className="fixed top-0 left-0 w-full h-auto pb-4 z-[150] bg-[#F03C2E] flex flex-col md:hidden shadow-2xl rounded-b-[2rem]"
             >
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between px-6 py-6 border-b border-white/20">
@@ -229,7 +229,7 @@ export default function Navbar() {
                 className="cursor-pointer"
               >
                 <button
-                  className="flex items-center bg-white rounded-full p-1 hover:bg-neutral-100 transition-colors inline-flex w-full"
+                  className="flex items-center bg-white rounded-full p-1 hover:bg-neutral-100 transition-colors inline-flex w-fit"
                 >
                   <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#F03C2E]">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

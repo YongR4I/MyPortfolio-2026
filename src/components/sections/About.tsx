@@ -63,15 +63,15 @@ const words = [
 export default function About() {
   const containerRef = useRef<HTMLElement>(null);
 
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: textProgressRaw } = useScroll({
     target: containerRef,
     offset: ["start 80%", "center 50%"],
   });
 
-  const textProgress = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
+  const textProgress = useTransform(textProgressRaw, [0, 0.8], [0, 1]);
 
   return (
-    <section
+    <motion.section
       id="about"
       ref={containerRef}
       className="relative w-full overflow-hidden"
@@ -198,6 +198,6 @@ export default function About() {
           backgroundColor: '#666666',
         }}
       />
-    </section>
+    </motion.section>
   );
 }
