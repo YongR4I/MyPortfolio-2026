@@ -67,6 +67,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
     }
   }, [pathname]);
 

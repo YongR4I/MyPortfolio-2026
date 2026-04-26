@@ -49,8 +49,13 @@ export default function Navbar() {
     <>
       <nav className="absolute top-0 left-0 w-full z-50 px-6 md:px-10 py-6 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-white text-xl font-bold tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
-          LOGO
+        <div className="flex items-start">
+          <div className="text-white text-2xl font-bold tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
+            RAIHAN
+          </div>
+          <span className="text-[#FF4D00] font-black text-xl ml-0.5 mt-0" style={{ fontFamily: 'var(--font-inter)' }}>
+            *
+          </span>
         </div>
 
         {/* Desktop Nav Links & CTA */}
@@ -170,8 +175,13 @@ export default function Navbar() {
             >
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between px-6 py-6 border-b border-white/20">
-              <div className="text-white text-2xl font-black tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
-                RAIHAN
+              <div className="flex items-start">
+                <div className="text-white text-2xl font-black tracking-tighter" style={{ fontFamily: 'var(--font-inter)' }}>
+                  RAIHAN
+                </div>
+                <span className="text-white font-black text-xl ml-0.5 mt-0 opacity-80" style={{ fontFamily: 'var(--font-inter)' }}>
+                  *
+                </span>
               </div>
               <button 
                 onClick={() => setIsMenuOpen(false)}
