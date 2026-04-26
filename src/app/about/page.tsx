@@ -52,40 +52,49 @@ export default function AboutPage() {
 
   const certificates = [
     {
-      title: "Fundamental Front-end Web Development",
+      title: "React Web Development",
+      company: "Codingcamp Powered By DBS",
+      year: "2025",
+      image: "/images/Certificates/1.png",
+      link: "https://www.dicoding.com/certificates/0LZ0Y1RRNX65"
+    },
+    {
+      title: "Front-End Development Fundamentals",
       company: "Codingcamp Powered By DBS",
       year: "2026",
-      image: "/images/projectdummy.png",
-      link: "#"
+      image: "/images/Certificates/2.png",
+      link: "https://www.dicoding.com/certificates/RVZK06LYQZD5"
     },
     {
-      title: "Front-End Web Development",
+      title: "JavaScript Programming Foundations",
       company: "Codingcamp Powered By DBS",
       year: "2025",
-      image: "/images/projectdummy.png",
-      link: "#"
+      image: "/images/Certificates/3.png",
+      link: "https://www.dicoding.com/certificates/2VX30N1OJXYQ"
     },
     {
-      title: "React Developer Professional",
-      company: "Codingcamp Powered By DBS",
-      year: "2025",
-      image: "/images/projectdummy.png",
-      link: "#"
-    },
-    {
-      title: "UI/UX Design Specialist",
+      title: "Cloud Computing & Generative AI on AWS",
       company: "Codingcamp Powered By DBS",
       year: "2024",
-      image: "/images/projectdummy.png",
-      link: "#"
+      image: "/images/Certificates/4.png",
+      link: "https://www.dicoding.com/certificates/53XEK850KXRN"
     },
     {
-      title: "Advanced JavaScript Programming",
+      title: "Back-End Development with JavaScript",
       company: "Codingcamp Powered By DBS",
       year: "2024",
-      image: "/images/projectdummy.png",
-      link: "#"
+      image: "/images/Certificates/5.png",
+      link: "https://www.dicoding.com/certificates/EYX4K44G5PDL"
+    },
+    {
+      title: "Web Programming Fundamentals",
+      company: "Codingcamp Powered By DBS",
+      year: "2024",
+      image: "/images/Certificates/6.png",
+      link: "https://www.dicoding.com/certificates/MEPJ24J3WP3V"
     }
+
+    
   ];
 
   return (
@@ -429,6 +438,7 @@ export default function AboutPage() {
             <AnimatePresence>
               {hoveredIndex !== null && (
                 <motion.div
+                  key={hoveredIndex}
                   initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%', filter: 'blur(10px)' }}
                   animate={{ 
                     opacity: 1, 
@@ -453,11 +463,15 @@ export default function AboutPage() {
                     y: '-50%'
                   }}
                 >
-                  <Image
+                  <img
+                    key={`cert-img-${hoveredIndex}`}
                     src={certificates[hoveredIndex].image}
                     alt={certificates[hoveredIndex].title}
-                    fill
-                    className="object-cover"
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover' 
+                    }}
                   />
                 </motion.div>
               )}

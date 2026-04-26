@@ -19,7 +19,7 @@ const stats = [
     value: 10,
     suffix: "+",
     label: "Projects Done",
-    description: "Around worldwide in last five years."
+    description: "Around worldwide in last 2 years."
   },
   {
     value: 100,

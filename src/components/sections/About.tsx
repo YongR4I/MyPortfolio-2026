@@ -3,6 +3,8 @@
 import { useRef, memo } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import Link from "next/link";
+import { useTransition } from "@/context/TransitionContext";
+
 
 /**
  * Komponen pembantu untuk animasi per kata
@@ -61,7 +63,9 @@ const words = [
  */
 
 export default function About() {
+  const { navigateWithTransition } = useTransition();
   const containerRef = useRef<HTMLElement>(null);
+
 
   const { scrollYProgress: textProgressRaw } = useScroll({
     target: containerRef,
@@ -157,33 +161,33 @@ export default function About() {
             needs.
           </p>
 
-          <Link href="/about" passHref>
-            <button
-              style={{
-                fontFamily: "var(--font-inter)",
-                fontWeight: 400,
-                fontSize: 'clamp(13px, 1.1vw, 15px)',
-                color: '#FFFFFF',
-                backgroundColor: 'transparent',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                borderRadius: '999px',
-                padding: '10px 24px',
-                marginTop: '20px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#FF442B';
-                e.currentTarget.style.color = '#FF442B';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-            >
-              More About Me...
-            </button>
-          </Link>
+          <button
+            onClick={() => navigateWithTransition("/about")}
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontWeight: 400,
+              fontSize: 'clamp(13px, 1.1vw, 15px)',
+              color: '#FFFFFF',
+              backgroundColor: 'transparent',
+              border: '1px solid rgba(255, 255, 255, 0.4)',
+              borderRadius: '999px',
+              padding: '10px 24px',
+              marginTop: '20px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#FF442B';
+              e.currentTarget.style.color = '#FF442B';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              e.currentTarget.style.color = '#FFFFFF';
+            }}
+          >
+            More About Me...
+          </button>
+
         </div>
       </div>
 
