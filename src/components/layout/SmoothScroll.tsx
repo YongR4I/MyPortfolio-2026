@@ -17,6 +17,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   useEffect(() => {
     setMounted(true);
 
+    // Force manual scroll restoration to prevent browser from hijacking scroll on navigation
+    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     // Disable Lenis on mobile devices for better performance/native feel
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
@@ -80,13 +85,17 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   useEffect(() => {
     const handleScrollTo = (e: any) => {
       const target = e.detail?.target;
+      const immediate = e.detail?.immediate || false;
+      
       if (target !== undefined && lenisRef.current) {
         lenisRef.current.scrollTo(target, { 
-          duration: 2.0, 
+          immediate,
+          duration: immediate ? 0 : 2.0, 
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) 
         });
       }
     };
+
 
 
     window.addEventListener('lenis-scroll-to', handleScrollTo);

@@ -29,6 +29,12 @@ export const TransitionProvider = ({ children }: { children: React.ReactNode }) 
     
     setIsTransitioning(true);
     
+    // Scroll to top immediately when transition starts to prepare for next page
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+      window.dispatchEvent(new CustomEvent('lenis-scroll-to', { detail: { target: 0, immediate: true } }));
+    }
+
     // Wait for the entry animation (slide in) before navigating
     // Match this with the transition duration in Preloader
     setTimeout(() => {
