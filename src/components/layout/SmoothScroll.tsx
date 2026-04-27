@@ -65,24 +65,29 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
   // Reset scroll to top on route change
   useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-    } else {
-      window.scrollTo(0, 0);
-    }
+    const timer = setTimeout(() => {
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }, 100); // Small delay to ensure content is rendered
+    
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   // Handle custom scroll-to events (e.g., from Navbar)
   useEffect(() => {
     const handleScrollTo = (e: any) => {
       const target = e.detail?.target;
-      if (target && lenisRef.current) {
+      if (target !== undefined && lenisRef.current) {
         lenisRef.current.scrollTo(target, { 
-          duration: 2.5, 
+          duration: 2.0, 
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) 
         });
       }
     };
+
 
     window.addEventListener('lenis-scroll-to', handleScrollTo);
     return () => window.removeEventListener('lenis-scroll-to', handleScrollTo);

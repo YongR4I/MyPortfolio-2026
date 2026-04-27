@@ -22,7 +22,10 @@ export const TransitionProvider = ({ children }: { children: React.ReactNode }) 
   }, [pathname]);
 
   const navigateWithTransition = (href: string) => {
-    if (pathname === href) return;
+    if (pathname === href) {
+      window.dispatchEvent(new CustomEvent('lenis-scroll-to', { detail: { target: 0 } }));
+      return;
+    }
     
     setIsTransitioning(true);
     
@@ -32,6 +35,7 @@ export const TransitionProvider = ({ children }: { children: React.ReactNode }) 
       router.push(href);
     }, 1000); 
   };
+
 
   return (
     <TransitionContext.Provider value={{ isTransitioning, setIsTransitioning, navigateWithTransition }}>

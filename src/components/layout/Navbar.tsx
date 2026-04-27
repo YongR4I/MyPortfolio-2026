@@ -21,6 +21,7 @@ export default function Navbar() {
   const handleNavClick = (href: string) => {
     // If it's a hash link on the current page, or just a hash link generally, don't use transition
     if (href.startsWith('#') || (href.startsWith('/#') && pathname === '/')) {
+
       const target = href.includes('#') ? href.split('#')[1] : null;
       if (target) {
         window.dispatchEvent(new CustomEvent('lenis-scroll-to', { detail: { target: `#${target}` } }));
