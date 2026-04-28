@@ -138,7 +138,7 @@ export default function ContactPage() {
             </div>
 
             {/* H E L L O Typing Text - Massive and Left-Aligned */}
-            <div className="flex w-full px-6 md:px-12 pb-10 md:pb-20">
+            <div className="flex w-full px-8 md:px-16 lg:px-24 pb-10 md:pb-24">
               {"HELLO".split("").map((char, index) => (
                 <motion.span
                   key={index}
@@ -152,7 +152,7 @@ export default function ContactPage() {
                   className="text-black font-medium select-none"
                   style={{ 
                     fontFamily: 'var(--font-montreal, "PP Neue Montreal", sans-serif)', 
-                    fontSize: 'clamp(80px, 32vw, 500px)',
+                    fontSize: 'clamp(80px, 28vw, 460px)',
                     lineHeight: '0.7',
                     letterSpacing: '-0.05em'
                   }}
