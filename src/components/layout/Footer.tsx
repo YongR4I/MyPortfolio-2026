@@ -35,7 +35,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative w-full min-h-[100svh] bg-white pt-16 md:pt-20 pb-6 px-6 md:px-12 flex flex-col justify-between font-inter text-black z-50 rounded-t-[30px] md:rounded-t-[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.2)] mt-auto">
+    <footer className="relative w-full min-h-[100svh] bg-white pt-16 md:pt-20 pb-6 px-6 md:px-12 flex flex-col justify-between font-inter text-black z-40 rounded-t-[30px] md:rounded-t-[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.2)] mt-auto">
       <div className="flex flex-col md:flex-row justify-between w-full mx-auto items-start md:items-end mb-16 md:mb-20 gap-12 md:gap-0">
 
         {/* Left Section - Contact Info */}

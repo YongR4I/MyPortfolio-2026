@@ -210,7 +210,10 @@ export default function Navbar() {
                     onClick={(e) => {
                       e.preventDefault();
                       setIsMenuOpen(false);
-                      handleNavClick(item.href);
+                      // Use setTimeout to allow the menu close animation to start before navigating
+                      setTimeout(() => {
+                        handleNavClick(item.href);
+                      }, 300);
                     }}
                     className="flex items-start gap-1 text-white hover:text-white/80 transition-colors cursor-pointer"
                   >
