@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { projectsData } from '@/data';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { useTransition } from '@/context/TransitionContext';
 
 /**
  * src/components/sections/Projects.tsx
@@ -37,20 +38,35 @@ const ProjectCard = ({
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, targetOpacity]);
 
+  const { navigateWithTransition } = useTransition();
+
+  const handleCardClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigateWithTransition(`/projects/${project.slug}`);
+  };
+
   return (
     <motion.div
       ref={cardRef}
       style={{ scale, opacity }}
-      className="w-full h-[100dvh] flex items-center justify-center"
+      className="w-full h-[100dvh] flex items-center justify-center sticky top-0"
     >
-      <Link href={`/projects/${project.slug}`} className="block w-full h-full cursor-none">
+      <a 
+        href={`/projects/${project.slug}`} 
+        onClick={handleCardClick} 
+        className="block w-full h-full cursor-none"
+      >
         <motion.div
            onMouseEnter={() => setHover(true)}
            onMouseLeave={() => setHover(false)}
-           className={`flex flex-col lg:flex-row p-4 md:p-8 lg:p-12 justify-between gap-4 md:gap-8 w-full h-full bg-[#18181B] border-t border-white/10`}
+           className={`flex flex-col lg:flex-row p-4 md:p-8 lg:p-12 justify-between gap-4 md:gap-8 w-full h-full border-t border-white/10 ${
+             'bg-[#18181B]'
+           }`}
         >
           {/* Left: Image Container */}
-          <div className={`w-full lg:w-[65%] h-[55%] lg:h-full relative rounded-2xl overflow-hidden bg-[#18181B]`}>
+          <div className={`w-full lg:w-[65%] h-[55%] lg:h-full relative rounded-2xl overflow-hidden ${
+             'bg-[#18181B]'
+          }`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={project.imagePlaceholder}
@@ -62,14 +78,19 @@ const ProjectCard = ({
           {/* Right: Description Card */}
           <div className="w-full lg:w-[35%] h-[45%] lg:h-full relative">
             <div className={`flex flex-col h-full p-2 lg:py-4 lg:px-4`}>
+              {index === 0 && (
+                <h3 className="font-['Inter_Display'] font-semibold text-base md:text-lg tracking-tight text-white mb-2 md:mb-3 pointer-events-none">
+                  Modern Portfolio
+                </h3>
+              )}
               {/* Year using DM Mono */}
-              <p className={`font-mono mb-2 md:mb-4 tracking-wider text-sm md:text-base pointer-events-none text-white/60`}>
+              <p className="font-mono mb-2 md:mb-4 tracking-wider text-sm md:text-base pointer-events-none text-white/60">
                 Jan - Apr 2026
               </p>
 
               {/* Description using Inter Display Regular */}
               <div className="flex-1 min-h-0 overflow-hidden mb-2">
-                <p className={`block font-['Inter_Display'] font-normal text-sm md:text-base lg:text-[1.1rem] leading-relaxed pointer-events-none text-white/80 line-clamp-4 md:line-clamp-5 lg:line-clamp-none`}>
+                <p className="block font-['Inter_Display'] font-normal text-sm md:text-base lg:text-[1.1rem] leading-relaxed pointer-events-none line-clamp-4 md:line-clamp-5 lg:line-clamp-none text-white/80">
                   {project.description}
                 </p>
               </div>
@@ -78,13 +99,13 @@ const ProjectCard = ({
               <div className="flex justify-between items-end mt-auto pointer-events-none gap-4">
                 <div className="flex flex-wrap gap-2">
                   {project.techStack?.slice(0, 3).map((tech: string, i: number) => (
-                    <div key={i} className={`py-2 px-3 lg:px-4 rounded-[1.5rem] bg-white/10 flex items-center justify-center`}>
-                      <p className={`font-['Inter_Display'] text-xs lg:text-sm text-white/80 whitespace-nowrap`}>{tech}</p>
+                    <div key={i} className="py-2 px-3 lg:px-4 rounded-[1.5rem] flex items-center justify-center bg-white/10">
+                      <p className="font-['Inter_Display'] text-xs lg:text-sm whitespace-nowrap text-white/80">{tech}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className={`w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0 rounded-full bg-white flex items-center justify-center`}>
+                <div className="w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-white">
                   <svg width="20" height="20" className="lg:w-6 lg:h-6 -rotate-[60deg]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12H19" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M12 5L19 12L12 19" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -94,7 +115,7 @@ const ProjectCard = ({
             </div>
           </div>
         </motion.div>
-      </Link>
+      </a>
     </motion.div>
   );
 };
@@ -173,7 +194,7 @@ export default function Projects() {
             }}
           >
             <motion.div
-              className={`w-[90px] h-[90px] rounded-[1.5rem] flex items-center justify-center shadow-2xl border backdrop-blur-sm ${index === 0 ? 'border-black/20' : 'border-white/20'}`}
+              className="w-[90px] h-[90px] rounded-[1.5rem] flex items-center justify-center shadow-2xl border backdrop-blur-sm border-white/20"
               initial={{ opacity: 0, y: 30, scale: 0.8, backgroundColor: "rgba(255, 68, 43, 0)" }}
               animate={{
                 opacity: isHovered ? 1 : 0,
