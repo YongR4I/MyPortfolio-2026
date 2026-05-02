@@ -29,23 +29,28 @@ const ProjectCard = ({
     offset: ["start start", "end start"]
   });
 
-  // Skala mengecil ke 0.95 saat di-scroll lewat
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
+  // Animasi scale down saat section di-scroll ke atas (stuck effect)
+  // Kecuali untuk card terakhir, kita buat tetap 1 agar tidak mengecil saat di-scroll ke section berikutnya
+  const targetScale = index === total - 1 ? 1 : 0.9;
+  const targetOpacity = index === total - 1 ? 1 : 0.8;
+
+  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, targetOpacity]);
 
   return (
-    <div
+    <motion.div
       ref={cardRef}
-      className="h-screen w-full sticky top-0 flex items-center justify-center"
+      style={{ scale, opacity }}
+      className="w-full h-[100dvh] flex items-center justify-center"
     >
-      <Link href="/projects" className="block w-full max-w-[1250px] mx-auto p-4 md:p-6 cursor-none">
+      <Link href={`/projects/${project.slug}`} className="block w-full h-full cursor-none">
         <motion.div
-          style={{ scale }}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          className="flex flex-col lg:flex-row justify-between gap-4 md:gap-6 w-full origin-top bg-[#18181B] rounded-[2rem]"
+           onMouseEnter={() => setHover(true)}
+           onMouseLeave={() => setHover(false)}
+           className={`flex flex-col lg:flex-row p-4 md:p-8 lg:p-12 justify-between gap-4 md:gap-8 w-full h-full bg-[#18181B] border-t border-white/10`}
         >
           {/* Left: Image Container */}
-          <div className="w-full lg:w-[800px] h-[35vh] lg:h-[600px] relative rounded-2xl overflow-hidden border border-white/10 bg-[#18181B] shadow-2xl">
+          <div className={`w-full lg:w-[65%] h-[55%] lg:h-full relative rounded-2xl overflow-hidden bg-[#18181B]`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={project.imagePlaceholder}
@@ -55,40 +60,42 @@ const ProjectCard = ({
           </div>
 
           {/* Right: Description Card */}
-          <div className="w-full lg:flex-1 h-auto lg:h-[600px] relative">
-            <div className="flex flex-col h-full p-6 lg:p-10 rounded-2xl border border-white/10 bg-[#18181B] shadow-2xl">
+          <div className="w-full lg:w-[35%] h-[45%] lg:h-full relative">
+            <div className={`flex flex-col h-full p-2 lg:py-4 lg:px-4`}>
               {/* Year using DM Mono */}
-              <p className="font-mono text-white mb-3 md:mb-6 tracking-wider text-sm md:text-base pointer-events-none">
-                (2024)
+              <p className={`font-mono mb-2 md:mb-4 tracking-wider text-sm md:text-base pointer-events-none text-white/60`}>
+                Jan - Apr 2026
               </p>
-
-              {/* Title using Inter Display Bold */}
-              <h3 className="font-['Inter_Display'] font-bold text-3xl md:text-4xl lg:text-[44px] leading-tight mb-4 md:mb-8 text-white pointer-events-none">
-                {project.title}
-              </h3>
 
               {/* Description using Inter Display Regular */}
-              <p className="hidden lg:block font-['Inter_Display'] font-normal text-[#999999] text-base leading-relaxed flex-grow pointer-events-none">
-                For {project.title}, we crafted a design that honors the rich heritage of classic cars while adding a modern twist. Combining timeless elegance with sleek, contemporary elements, we created an experience that appeals to both enthusiasts and newcomers, celebrating the past with a fresh perspective.
-              </p>
+              <div className="flex-1 min-h-0 overflow-hidden mb-2">
+                <p className={`block font-['Inter_Display'] font-normal text-sm md:text-base lg:text-[1.1rem] leading-relaxed pointer-events-none text-white/80 line-clamp-4 md:line-clamp-5 lg:line-clamp-none`}>
+                  {project.description}
+                </p>
+              </div>
 
               {/* List / Table */}
-              <div className="flex flex-col mt-auto pt-4 lg:pt-6 pointer-events-none">
-                <div className="border-b-[0.5px] border-white/10 pb-2 mb-2 lg:py-4 lg:mb-0">
-                  <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Landing Page</p>
+              <div className="flex justify-between items-end mt-auto pointer-events-none gap-4">
+                <div className="flex flex-wrap gap-2">
+                  {project.techStack?.slice(0, 3).map((tech: string, i: number) => (
+                    <div key={i} className={`py-2 px-3 lg:px-4 rounded-[1.5rem] bg-white/10 flex items-center justify-center`}>
+                      <p className={`font-['Inter_Display'] text-xs lg:text-sm text-white/80 whitespace-nowrap`}>{tech}</p>
+                    </div>
+                  ))}
                 </div>
-                <div className="border-b-[0.5px] border-white/10 pb-2 mb-2 lg:py-4 lg:mb-0">
-                  <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Mobile App</p>
-                </div>
-                <div className="border-b-[0.5px] border-white/10 pb-2 lg:py-4">
-                  <p className="font-['Inter_Display'] text-[#999999] text-sm md:text-base">Redesign</p>
+
+                <div className={`w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0 rounded-full bg-white flex items-center justify-center`}>
+                  <svg width="20" height="20" className="lg:w-6 lg:h-6 -rotate-[60deg]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 5L19 12L12 19" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
               </div>
             </div>
           </div>
         </motion.div>
       </Link>
-    </div>
+    </motion.div>
   );
 };
 
@@ -116,8 +123,8 @@ export default function Projects() {
     const handleScroll = () => {
       if (typeof window !== 'undefined') {
         const el = document.elementFromPoint(mouseX.get(), mouseY.get());
-        // Jika elemen di bawah mouse BUKAN bagian dari section projects, sembunyikan kursor kustom
-        if (!el?.closest('#projects')) {
+        // Jika elemen di bawah mouse BUKAN bagian dari salah satu section project, sembunyikan kursor kustom
+        if (!el?.closest('[id^="project-section-"]')) {
           setIsHovered(false);
         }
       }
@@ -133,61 +140,56 @@ export default function Projects() {
   }, [mouseX, mouseY]);
 
   return (
-    <section
-      id="projects"
-      className="bg-[#18181B] relative w-full pb-[20vh] cursor-default"
-      onMouseLeave={() => setIsHovered(false)}
-    >
-
-      {/*
-        Custom Cursor "VIEW"
-        Dengan animasi fade up dan transisi warna transparan ke oranye
-      */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[100] hidden lg:flex items-center justify-center"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: '-50%',
-          translateY: '-50%'
-        }}
-      >
-        <motion.div
-          className="w-[90px] h-[90px] rounded-[1.5rem] flex items-center justify-center shadow-2xl border border-white/20 backdrop-blur-sm"
-          initial={{ opacity: 0, y: 30, scale: 0.8, backgroundColor: "rgba(255, 68, 43, 0)" }}
-          animate={{
-            opacity: isHovered ? 1 : 0,
-            y: isHovered ? 0 : 30,
-            scale: isHovered ? 1 : 0.8,
-            backgroundColor: isHovered ? "#FF442B" : "rgba(255, 68, 43, 0)"
-          }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        >
-          <span className="text-white font-['Inter_Display'] font-bold text-[14px] leading-tight text-center tracking-widest uppercase">
-            VIEW
-          </span>
-        </motion.div>
-      </motion.div>
-
-      {/* Label Header */}
-      <div className="absolute top-12 left-6 md:left-6 lg:left-20 z-10">
+    <div id="projects-container">
+      {/* Label Header Global (Hanya tampil sekali di paling atas) */}
+      <div className="relative pt-12 pb-6 px-6 md:px-12 lg:px-20 bg-[#18181B]">
         <span className="text-[#FF442B] font-['Inter_Display'] text-[14px] uppercase tracking-wider">
           {"//"} Projects
         </span>
       </div>
 
-      {/* Spacer atas agar card pertama tidak tertutup label header */}
-      <div className="h-[15vh]" />
-
       {projectsData.map((project, index) => (
-        <ProjectCard
+        <section
           key={project.id}
-          project={project}
-          index={index}
-          total={projectsData.length}
-          setHover={setIsHovered}
-        />
+          id={`project-section-${index}`}
+          className={`relative w-full h-screen cursor-default flex items-center justify-center sticky top-0`}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <ProjectCard
+            project={project}
+            index={index}
+            total={projectsData.length}
+            setHover={setIsHovered}
+          />
+          
+          {/* Custom Cursor "VIEW" per section */}
+          <motion.div
+            className="fixed top-0 left-0 pointer-events-none z-[100] hidden lg:flex items-center justify-center"
+            style={{
+              x: cursorX,
+              y: cursorY,
+              translateX: '-50%',
+              translateY: '-50%'
+            }}
+          >
+            <motion.div
+              className={`w-[90px] h-[90px] rounded-[1.5rem] flex items-center justify-center shadow-2xl border backdrop-blur-sm ${index === 0 ? 'border-black/20' : 'border-white/20'}`}
+              initial={{ opacity: 0, y: 30, scale: 0.8, backgroundColor: "rgba(255, 68, 43, 0)" }}
+              animate={{
+                opacity: isHovered ? 1 : 0,
+                y: isHovered ? 0 : 30,
+                scale: isHovered ? 1 : 0.8,
+                backgroundColor: isHovered ? "#FF442B" : "rgba(255, 68, 43, 0)"
+              }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <span className="text-white font-['Inter_Display'] font-bold text-[14px] leading-tight text-center tracking-widest uppercase">
+                VIEW
+              </span>
+            </motion.div>
+          </motion.div>
+        </section>
       ))}
-    </section>
+    </div>
   );
 }

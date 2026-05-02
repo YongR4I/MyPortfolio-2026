@@ -34,17 +34,9 @@ export default function Navbar() {
   let navItems = [
     { name: 'Home', id: '01', href: '/' },
     { name: 'About', id: '02', href: '/about' },
-    { name: 'Services', id: '03', href: '/#services' },
-    { name: 'Project', id: '04', href: '/projects' },
+    { name: 'Project', id: '03', href: '/projects' },
   ];
 
-  if (pathname !== '/') {
-    navItems = navItems.filter(item => item.name !== 'Services');
-    navItems = navItems.map((item, index) => ({
-      ...item,
-      id: `0${index + 1}`
-    }));
-  }
 
   return (
     <>

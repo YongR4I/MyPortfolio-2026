@@ -17,4 +17,10 @@ export interface ProjectType {
   description: string;
   techStack: string[];
   imagePlaceholder: string;
+  year?: string;
+  overview?: string;
+  problemAndApproach?: string;
+  results?: string[];
+  liveLink?: string;
+  githubLink?: string;
 }
