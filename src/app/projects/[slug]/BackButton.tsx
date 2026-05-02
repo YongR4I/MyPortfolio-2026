@@ -7,13 +7,13 @@ import { useTransition } from '@/context/TransitionContext';
 export function BackButton() {
   const { navigateWithTransition } = useTransition();
 
-  const handleBack = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
     navigateWithTransition('/#projects-container');
   };
 
   return (
-    <a
+    <Link
       href="/#projects-container"
       onClick={handleBack}
       className="group flex items-center gap-3 text-white/70 hover:text-white transition-colors cursor-pointer"
@@ -25,6 +25,6 @@ export function BackButton() {
         </svg>
       </div>
       <span className="font-mono text-xs uppercase tracking-widest">Back</span>
-    </a>
+    </Link>
   );
 }
