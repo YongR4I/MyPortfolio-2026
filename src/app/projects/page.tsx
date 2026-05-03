@@ -34,9 +34,24 @@ const projectsData = [
 ];
 
 export default function ProjectsPage() {
-  const [view, setView] = useState<'GRID' | 'LIST'>('GRID');
+
   const [selectedProject, setSelectedProject] = useState<typeof projectsData[0] | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState('ALL');
   const containerRef = useRef<HTMLDivElement>(null);
+  const filterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+        setIsFilterOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [filterRef]);
 
   // Mencegah scroll saat modal terbuka
   useEffect(() => {
@@ -56,7 +71,7 @@ export default function ProjectsPage() {
   }, [selectedProject]);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <Navbar />
 
       <main className="pt-24 md:pt-32 pb-20 px-4 md:px-8 max-w-[1600px] mx-auto">
@@ -69,25 +84,42 @@ export default function ProjectsPage() {
             </div>
 
             <div className="flex items-center gap-6 mt-6 md:mt-0">
-                <div className="flex items-center gap-2 text-sm uppercase font-medium">
+                <div className="relative flex items-center gap-2 text-sm uppercase font-medium" ref={filterRef}>
                     <span className="text-white/60">FILTER:</span>
-                    <button className="hover:opacity-60 transition-opacity">ALL PROJECT +</button>
+                    <button 
+                      onClick={() => setIsFilterOpen(!isFilterOpen)}
+                      className="hover:opacity-60 transition-opacity flex items-center gap-1"
+                    >
+                      {selectedFilter} {isFilterOpen ? '-' : '+'}
+                    </button>
+
+                    <AnimatePresence>
+                      {isFilterOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, clipPath: 'inset(0% 0% 100% 0%)', y: -10 }}
+                          animate={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0%)', y: 0 }}
+                          exit={{ opacity: 0, clipPath: 'inset(0% 0% 100% 0%)', y: -10 }}
+                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                          className="absolute top-[calc(100%+16px)] right-0 bg-[#F8F8F8] text-black min-w-[240px] py-4 z-50 rounded shadow-2xl origin-top-right"
+                        >
+                          {['ALL', 'FRONTEND', 'BACKEND'].map((filter) => (
+                            <button
+                              key={filter}
+                              onClick={() => {
+                                setSelectedFilter(filter);
+                                setIsFilterOpen(false);
+                              }}
+                              className="w-full text-left px-6 py-2.5 hover:bg-black/5 transition-colors text-[13px] tracking-wide"
+                            >
+                              {filter}
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                 </div>
 
-                <div className="flex items-center border border-white/20 rounded-full overflow-hidden text-sm font-medium">
-                    <button
-                        onClick={() => setView('GRID')}
-                        className={`px-5 py-2 transition-colors ${view === 'GRID' ? 'bg-white text-black' : 'bg-transparent text-white hover:bg-white/10'}`}
-                    >
-                        GRID
-                    </button>
-                    <button
-                         onClick={() => setView('LIST')}
-                        className={`px-5 py-2 transition-colors ${view === 'LIST' ? 'bg-white text-black' : 'bg-transparent text-white hover:bg-white/10'}`}
-                    >
-                        LIST
-                    </button>
-                </div>
+
             </div>
         </div>
 

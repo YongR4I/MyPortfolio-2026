@@ -20,8 +20,20 @@ export default function AboutPage() {
   const experienceRef = useRef<HTMLDivElement>(null);
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   const [hasSeen, setHasSeen] = useState(false);
+  const [selectedCert, setSelectedCert] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (selectedCert !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedCert]);
 
   const { scrollYProgress: aboutScrollProgress } = useScroll();
   const bottomScale = useTransform(aboutScrollProgress, [0.7, 1], [1.2, 1]);
@@ -46,9 +58,7 @@ export default function AboutPage() {
     delay: delay
   });
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  };
+
 
   const certificates = [
     {
@@ -108,7 +118,7 @@ export default function AboutPage() {
         className="sticky top-0 left-0 w-full overflow-hidden h-[60vh] md:h-[360px] z-[1]"
       >
         <Image
-          src="/images/projectdummy.png"
+          src="/images/About.jpg"
           alt="About Hero Background"
           fill
           priority
@@ -368,7 +378,6 @@ export default function AboutPage() {
       {/* ── Certificates Section ── */}
       <section 
         className="relative w-full bg-black min-h-screen z-10 flex flex-col justify-center"
-        onMouseMove={handleMouseMove}
       >
         <div className="mx-auto max-w-[1280px] w-full px-6 md:px-10 py-16 md:py-24 relative">
           <h2 className="text-white font-medium tracking-tight text-[32px] md:text-[40px] mb-8 md:mb-10" style={{ fontFamily: 'var(--font-inter)' }}>
@@ -377,14 +386,12 @@ export default function AboutPage() {
           
           <div className="border-t border-[#333] relative">
             {certificates.map((cert, i) => (
-              <a 
+              <div 
                 key={i} 
-                href={cert.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-row justify-between items-center py-6 md:py-8 border-b border-[#333] cursor-pointer transition-colors duration-500 no-underline"
+                className="group flex flex-row justify-between items-center py-6 md:py-8 border-b border-[#333] cursor-pointer transition-colors duration-500"
                 onMouseEnter={() => setHoveredIndex(i)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => setSelectedCert(i)}
               >
                 <h3 
                   className={`text-[18px] md:text-[28px] tracking-tight transition-colors duration-500 flex-1 pr-4 ${
@@ -397,88 +404,71 @@ export default function AboutPage() {
                 </h3>
                 
                 <div className="flex flex-row items-center gap-4 md:gap-12">
-                  <span className={`text-[11px] md:text-[16px] font-medium transition-colors duration-500 whitespace-nowrap ${
-                      hoveredIndex === null ? 'text-[#A1A1AA]' : 
-                      hoveredIndex === i ? 'text-[#FF4D00]' : 'text-[#222]'
-                    }`}
-                    style={{ fontFamily: 'var(--font-inter)' }}
-                  >
-                    {cert.company}
-                  </span>
-
                   <div 
-                    className={`flex flex-col text-right font-medium text-base md:text-[20px] leading-[1.05] tracking-tight transition-colors duration-500 ${
-                      hoveredIndex === null ? 'text-white' : 
+                    className={`text-right font-medium text-base md:text-[20px] leading-none tracking-tight transition-colors duration-500 ${
+                      hoveredIndex === null ? 'text-[#A1A1AA]' : 
                       hoveredIndex === i ? 'text-white' : 'text-[#444]'
                     }`}
                   >
-                    <span>{cert.year.slice(0, 2)}</span>
-                    <span>{cert.year.slice(2, 4)}</span>
+                    <span>{cert.year}</span>
                   </div>
 
-                  {/* Arrow for Mobile/Hover */}
-                  <div className={`transition-all duration-500 ${
-                    hoveredIndex === i ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
-                  } md:block hidden`}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#FF4D00]">
-                      <path d="M7 17l10-10M7 7h10v10"/>
-                    </svg>
-                  </div>
-
-                  <div className="md:hidden block ml-2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                  {/* Arrow Icon */}
+                  <div className={`w-[36px] h-[36px] md:w-[44px] md:h-[44px] flex flex-shrink-0 items-center justify-center rounded-full border transition-all duration-500 ml-2 md:ml-4 ${
+                      hoveredIndex === null ? 'bg-[#111] border-white/10 text-white' : 
+                      hoveredIndex === i ? 'bg-[#222] border-white/20 text-white scale-110' : 'bg-[#0a0a0a] border-white/5 text-[#444]'
+                    }`}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="md:w-[18px] md:h-[18px]">
                       <path d="M7 17l10-10M7 7h10v10"/>
                     </svg>
                   </div>
                 </div>
-              </a>
+              </div>
             ))}
 
-            {/* Hover Image Reveal - Desktop Only */}
-            <AnimatePresence>
-              {hoveredIndex !== null && (
-                <motion.div
-                  key={hoveredIndex}
-                  initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%', filter: 'blur(10px)' }}
-                  animate={{ 
-                    opacity: 1, 
-                    scale: 1,
-                    filter: 'blur(0px)',
-                    left: mousePosition.x,
-                    top: mousePosition.y,
-                    transition: { 
-                      opacity: { duration: 0.3 },
-                      filter: { duration: 0.4 },
-                      scale: { type: 'spring', stiffness: 200, damping: 25 },
-                      left: { type: 'spring', stiffness: 150, damping: 20, mass: 0.5 },
-                      top: { type: 'spring', stiffness: 150, damping: 20, mass: 0.5 }
-                    }
-                  }}
-                  exit={{ opacity: 0, scale: 0.8, filter: 'blur(10px)', transition: { duration: 0.2 } }}
-                  className="fixed pointer-events-none z-[100] w-[400px] h-[250px] overflow-hidden rounded-xl shadow-2xl border border-white/10 hidden md:block"
-                  style={{ 
-                    left: mousePosition.x, 
-                    top: mousePosition.y,
-                    x: '-50%',
-                    y: '-50%'
-                  }}
-                >
-                  <img
-                    key={`cert-img-${hoveredIndex}`}
-                    src={certificates[hoveredIndex].image}
-                    alt={certificates[hoveredIndex].title}
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover' 
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
       </section>
+
+      {/* ── Certificate Modal ── */}
+      <AnimatePresence>
+        {selectedCert !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-8"
+            onClick={() => setSelectedCert(null)}
+          >
+            {/* Modal Content */}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={certificates[selectedCert].image}
+                alt={certificates[selectedCert].title}
+                className="max-w-[90vw] max-h-[85vh] md:max-w-[1000px] rounded-xl object-contain block"
+              />
+              
+              {/* Close Button placed at the top right of the image */}
+              <button
+                onClick={() => setSelectedCert(null)}
+                className="absolute -top-4 -right-4 md:-top-5 md:-right-5 z-[210] w-10 h-10 flex items-center justify-center rounded-full bg-[#111] border border-white/10 hover:bg-[#222] hover:border-white/20 text-white transition-colors"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <Footer />
     </div>
