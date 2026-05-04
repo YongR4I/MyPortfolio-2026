@@ -140,7 +140,7 @@ export default function ContactFormSection() {
         <div className="lg:col-span-5 flex flex-col justify-start">
           <div className="flex items-center gap-3 mb-10 md:mb-16">
             <div className="w-2 h-2 bg-[#FF442B] rounded-sm"></div>
-            <span className="font-medium text-sm tracking-wide text-white/90" style={{ fontFamily: 'var(--font-inter)' }}>Let's Work Together</span>
+            <span className="font-medium text-sm tracking-wide text-white/90" style={{ fontFamily: 'var(--font-inter)' }}>Let&apos;s Work Together</span>
           </div>
 
           <div className="mb-10">
@@ -148,7 +148,7 @@ export default function ContactFormSection() {
               Contact Me!
             </h2>
             <p className="text-[#A1A1AA] text-base md:text-lg leading-relaxed max-w-md" style={{ fontFamily: 'var(--font-inter)' }}>
-              Let's create something amazing together! Reach out I'd love to hear about your project and ideas.
+              Let&apos;s create something amazing together! Reach out I&apos;d love to hear about your project and ideas.
             </p>
           </div>
 
