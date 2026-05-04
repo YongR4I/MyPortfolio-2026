@@ -448,6 +448,7 @@ export default function AboutPage() {
               className="relative shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={certificates[selectedCert].image}
                 alt={certificates[selectedCert].title}
