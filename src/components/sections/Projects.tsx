@@ -30,13 +30,7 @@ const ProjectCard = ({
     offset: ["start start", "end start"]
   });
 
-  // Animasi scale down saat section di-scroll ke atas (stuck effect)
-  // Kecuali untuk card terakhir, kita buat tetap 1 agar tidak mengecil saat di-scroll ke section berikutnya
-  const targetScale = index === total - 1 ? 1 : 0.9;
-  const targetOpacity = index === total - 1 ? 1 : 0.8;
-
-  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, targetOpacity]);
+  // Efek meredup dan scale down dihapus sesuai permintaan agar transisi murni flat
 
   const { navigateWithTransition } = useTransition();
 
@@ -48,20 +42,17 @@ const ProjectCard = ({
   return (
     <motion.div
       ref={cardRef}
-      style={{ scale, opacity }}
-      className="w-full h-[100dvh] flex items-center justify-center sticky top-0"
+      className="w-full h-[100dvh] flex items-center justify-center sticky top-0 overflow-hidden"
     >
       <a 
         href={`/projects/${project.slug}`} 
         onClick={handleCardClick} 
-        className="block w-full h-full cursor-none"
+        className="block w-full h-full cursor-none relative"
       >
         <motion.div
            onMouseEnter={() => setHover(true)}
            onMouseLeave={() => setHover(false)}
-           className={`flex flex-col lg:flex-row p-4 md:p-8 lg:p-12 justify-between gap-4 md:gap-8 w-full h-full border-t border-white/10 ${
-             'bg-[#18181B]'
-           }`}
+           className={`flex flex-col lg:flex-row p-4 md:p-8 lg:p-12 justify-between gap-4 md:gap-8 w-full h-full border-t border-white/10 bg-[#18181B] overflow-hidden`}
         >
           {/* Left: Image Container */}
           <div className={`w-full lg:w-[65%] h-[55%] lg:h-full relative rounded-2xl overflow-hidden ${
@@ -121,6 +112,9 @@ const ProjectCard = ({
 };
 
 export default function Projects() {
+  // Hook untuk navigasi dengan transisi
+  const { navigateWithTransition } = useTransition();
+
   // State untuk melacak apakah cursor berada di area kartu proyek
   const [isHovered, setIsHovered] = useState(false);
 
@@ -161,8 +155,9 @@ export default function Projects() {
   }, [mouseX, mouseY]);
 
   return (
-    <div id="projects-container">
-      {/* Label Header Global (Hanya tampil sekali di paling atas) */}
+    <>
+      <div id="projects-container">
+        {/* Label Header Global (Hanya tampil sekali di paling atas) */}
       <div className="relative pt-12 pb-6 px-6 md:px-12 lg:px-20 bg-[#18181B]">
         <span className="text-[#FF442B] font-['Inter_Display'] text-[14px] uppercase tracking-wider">
           {"//"} Projects
@@ -182,35 +177,81 @@ export default function Projects() {
             total={projectsData.length}
             setHover={setIsHovered}
           />
-          
-          {/* Custom Cursor "VIEW" per section */}
-          <motion.div
-            className="fixed top-0 left-0 pointer-events-none z-[100] hidden lg:flex items-center justify-center"
-            style={{
-              x: cursorX,
-              y: cursorY,
-              translateX: '-50%',
-              translateY: '-50%'
-            }}
-          >
-            <motion.div
-              className="w-[90px] h-[90px] rounded-[1.5rem] flex items-center justify-center shadow-2xl border backdrop-blur-sm border-white/20"
-              initial={{ opacity: 0, y: 30, scale: 0.8, backgroundColor: "rgba(255, 68, 43, 0)" }}
-              animate={{
-                opacity: isHovered ? 1 : 0,
-                y: isHovered ? 0 : 30,
-                scale: isHovered ? 1 : 0.8,
-                backgroundColor: isHovered ? "#FF442B" : "rgba(255, 68, 43, 0)"
-              }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <span className="text-white font-['Inter_Display'] font-bold text-[14px] leading-tight text-center tracking-widest uppercase">
-                VIEW
-              </span>
-            </motion.div>
-          </motion.div>
         </section>
       ))}
-    </div>
+
+      {/* Custom Cursor "VIEW" Global untuk Projects */}
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[100] hidden lg:flex items-center justify-center"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          translateX: '-50%',
+          translateY: '-50%'
+        }}
+      >
+        <motion.div
+          className="w-[90px] h-[90px] rounded-[1.5rem] flex items-center justify-center shadow-2xl border backdrop-blur-sm border-white/20"
+          initial={{ opacity: 0, y: 30, scale: 0.8, backgroundColor: "rgba(255, 68, 43, 0)" }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+            y: isHovered ? 0 : 30,
+            scale: isHovered ? 1 : 0.8,
+            backgroundColor: isHovered ? "#FF442B" : "rgba(255, 68, 43, 0)"
+          }}
+          transition={{ duration: isHovered ? 0.4 : 0.15, ease: "easeOut" }}
+        >
+          <span className="text-white font-['Inter_Display'] font-bold text-[14px] leading-tight text-center tracking-widest uppercase">
+            VIEW
+          </span>
+        </motion.div>
+      </motion.div>
+      </div>
+
+      {/* More Projects Button Section */}
+      <section className="relative w-full py-16 md:py-24 bg-[#18181B] flex flex-col justify-center items-center gap-8 z-10">
+        <h3 
+          className="text-white text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight text-center"
+          style={{ fontFamily: 'var(--font-inter)' }}
+        >
+          Want to see more of my work?
+        </h3>
+        <div 
+          onClick={() => navigateWithTransition("/projects")}
+          className="cursor-pointer"
+        >
+          <motion.button
+            className="relative flex items-center bg-[#E5E5E5] rounded-full p-1 group overflow-hidden"
+            initial="rest"
+            whileHover="hover"
+            animate="rest"
+          >
+            <motion.div
+              className="absolute left-1 top-1 bottom-1 bg-[#FF4D00] rounded-full z-0"
+              variants={{
+                rest: { width: '40px' },
+                hover: { width: 'calc(100% - 8px)' }
+              }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            />
+            <div className="relative flex items-center justify-center w-10 h-10 rounded-full z-10 shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <motion.span
+              className="relative text-sm font-medium pr-6 pl-2 z-10 whitespace-nowrap transition-colors duration-300"
+              style={{ fontFamily: 'var(--font-inter)' }}
+              variants={{
+                rest: { color: "#000000" },
+                hover: { color: "#FFFFFF" }
+              }}
+            >
+              See All Work
+            </motion.span>
+          </motion.button>
+        </div>
+      </section>
+    </>
   );
 }

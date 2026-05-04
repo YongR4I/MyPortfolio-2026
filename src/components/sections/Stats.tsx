@@ -53,7 +53,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
 export default function Stats() {
   return (
-    <section className="bg-[#18181B] py-24 md:py-32 px-6 md:px-10 lg:px-20 border-t border-white/5 relative">
+    <section className="bg-[#18181B] py-24 md:py-32 px-6 md:px-10 lg:px-20 border-t border-white/5 relative z-20">
       {/* Top Center Plus Icon */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <span className="text-white/20 text-2xl font-light">+</span>

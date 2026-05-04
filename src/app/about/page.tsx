@@ -64,7 +64,7 @@ export default function AboutPage() {
     {
       title: "React Web Development",
       company: "Codingcamp Powered By DBS",
-      year: "2025",
+      year: "2026",
       image: "/images/Certificates/1.png",
       link: "https://www.dicoding.com/certificates/0LZ0Y1RRNX65"
     },
@@ -78,33 +78,31 @@ export default function AboutPage() {
     {
       title: "JavaScript Programming Foundations",
       company: "Codingcamp Powered By DBS",
-      year: "2025",
+      year: "2026",
       image: "/images/Certificates/3.png",
       link: "https://www.dicoding.com/certificates/2VX30N1OJXYQ"
     },
     {
       title: "Cloud Computing & Generative AI on AWS",
       company: "Codingcamp Powered By DBS",
-      year: "2024",
+      year: "2026",
       image: "/images/Certificates/4.png",
       link: "https://www.dicoding.com/certificates/53XEK850KXRN"
     },
     {
       title: "Back-End Development with JavaScript",
       company: "Codingcamp Powered By DBS",
-      year: "2024",
+      year: "2026",
       image: "/images/Certificates/5.png",
       link: "https://www.dicoding.com/certificates/EYX4K44G5PDL"
     },
     {
       title: "Web Programming Fundamentals",
       company: "Codingcamp Powered By DBS",
-      year: "2024",
+      year: "2026",
       image: "/images/Certificates/6.png",
       link: "https://www.dicoding.com/certificates/MEPJ24J3WP3V"
     }
-
-    
   ];
 
   return (

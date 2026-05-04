@@ -161,32 +161,41 @@ export default function About() {
             needs.
           </p>
 
-          <button
+          <div 
             onClick={() => navigateWithTransition("/about")}
-            style={{
-              fontFamily: "var(--font-inter)",
-              fontWeight: 400,
-              fontSize: 'clamp(13px, 1.1vw, 15px)',
-              color: '#FFFFFF',
-              backgroundColor: 'transparent',
-              border: '1px solid rgba(255, 255, 255, 0.4)',
-              borderRadius: '999px',
-              padding: '10px 24px',
-              marginTop: '20px',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#FF442B';
-              e.currentTarget.style.color = '#FF442B';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-              e.currentTarget.style.color = '#FFFFFF';
-            }}
+            className="cursor-pointer mt-6 inline-block"
           >
-            More About Me...
-          </button>
+            <motion.button
+              className="relative flex items-center bg-[#E5E5E5] rounded-full p-1 group overflow-hidden"
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+            >
+              <motion.div
+                className="absolute left-1 top-1 bottom-1 bg-[#FF4D00] rounded-full z-0"
+                variants={{
+                  rest: { width: '40px' },
+                  hover: { width: 'calc(100% - 8px)' }
+                }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              />
+              <div className="relative flex items-center justify-center w-10 h-10 rounded-full z-10 shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                  <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <motion.span
+                className="relative text-sm font-medium pr-6 pl-2 z-10 whitespace-nowrap transition-colors duration-300"
+                style={{ fontFamily: 'var(--font-inter)' }}
+                variants={{
+                  rest: { color: "#000000" },
+                  hover: { color: "#FFFFFF" }
+                }}
+              >
+                More About me
+              </motion.span>
+            </motion.button>
+          </div>
 
         </div>
       </div>
