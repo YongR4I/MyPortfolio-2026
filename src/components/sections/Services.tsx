@@ -72,7 +72,7 @@ export default function Services() {
                 initial={{ opacity: 0, rotateY: 90, scale: 0.95 }}
                 animate={{ opacity: 1, rotateY: 0, scale: 1 }}
                 exit={{ opacity: 0, rotateY: -90, scale: 0.95 }}
-                transition={{ duration: 0.35, ease: "easeOut" }} // Faster and snappier transition
+                transition={{ duration: 0.28, ease: "easeOut" }} // Faster and snappier transition
                 className="font-mono leading-none select-none text-[#18181B] absolute"
                 style={{
                   fontSize: 'clamp(140px, 22vw, 300px)',

@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform, useMotionValue, useAnimationFrame } from 'framer-motion';
+import Lenis from 'lenis';
 
 const projectsData = [
   {
@@ -12,26 +13,176 @@ const projectsData = [
     title: "GAVIN SCHNEIDER PRODUCTIONS",
     category: "DIGITAL DESIGN - WEB DEVELOPMENT",
     image: "/images/projectdummy.png",
+    images: [
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png"
+    ],
+    overview: "A comprehensive digital platform showcasing high-end production portfolios. The design focuses on large imagery and smooth, elegant interactions to reflect the premium quality of the productions.",
+    problemAndApproach: "The primary challenge was implementing complex, continuous motion graphics without sacrificing web performance and accessibility.",
+    results: [
+      "Achieved a 98+ Lighthouse performance score despite heavy animation usage.",
+      "Established a cohesive, memorable brand identity with custom interactions."
+    ],
+    role: "Frontend Developer",
+    year: "2024",
+    techStack: ["Next.js", "Framer Motion", "Tailwind CSS"],
+    liveLink: "https://your-portfolio.com",
+    githubLink: "PRIVATE FOR NOW"
   },
   {
     id: 2,
     title: "FRESHMAN",
     category: "STRATEGY - BRAND IDENTITY - DIGITAL DESIGN - WEB DEVELOPMENT - CREATIVE DIRECTION",
     image: "/images/projectdummy.png",
+    images: [
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png"
+    ],
+    overview: "A complete brand overhaul and digital presence for Freshman. The project encompassed everything from strategic positioning to a fully bespoke e-commerce experience.",
+    problemAndApproach: "E-commerce sites often suffer from bloated state management and clunky cart interactions. I utilized React with TypeScript to establish a strictly typed, predictable state flow.",
+    results: [
+      "Designed a frictionless, single-page checkout flow.",
+      "Implemented advanced GSAP scroll animations maintaining 60fps."
+    ],
+    role: "Full Stack Developer",
+    year: "2025",
+    techStack: ["React", "TypeScript", "GSAP"],
+    liveLink: "https://project-two.com",
+    githubLink: "https://github.com/yourusername/project-two"
   },
   {
     id: 3,
     title: "MOON EVENT",
     category: "EVENT - DIGITAL DESIGN",
     image: "/images/projectdummy.png",
+    images: [
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png"
+    ],
+    overview: "An immersive digital invitation and event management platform. Built to handle high traffic and provide a seamless RSVP experience with interactive 3D elements.",
+    problemAndApproach: "Rendering thousands of particles dynamically in the browser usually leads to severe frame drops. I bypassed the standard DOM completely, relying on raw Canvas API and Three.js.",
+    results: [
+      "Maintained a stable 60fps while rendering over 50,000 active particles.",
+      "Successfully synced real-time audio frequency data with GPU shader uniforms."
+    ],
+    role: "Creative Developer",
+    year: "2023",
+    techStack: ["Vite", "Three.js", "WebGL"],
+    liveLink: "https://project-three.com",
+    githubLink: "https://github.com/yourusername/project-three"
   },
   {
     id: 4,
     title: "AESOP ROZU",
     category: "WEB DEVELOPMENT - DIGITAL DESIGN",
     image: "/images/projectdummy.png",
+    images: [
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png",
+      "/images/projectdummy.png"
+    ],
+    overview: "An interactive product showcase for the Rozu fragrance. The site features sensory-driven design, subtle animations, and performance-optimized media delivery.",
+    problemAndApproach: "Creating a seamless sensory experience required careful coordination of visual assets and smooth animations while keeping load times minimal.",
+    results: [
+      "Implemented an intuitive scroll-driven narrative.",
+      "Optimized high-resolution image delivery with Next.js Image component."
+    ],
+    role: "UI/UX Developer",
+    year: "2024",
+    techStack: ["Next.js", "Lenis", "GSAP"],
+    liveLink: "https://aesop-rozu.com",
+    githubLink: "https://github.com/yourusername/aesop"
   }
 ];
+
+const wrap = (min: number, max: number, v: number) => {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+};
+
+const InfiniteSlider = ({ images }: { images: string[] }) => {
+  const baseX = useMotionValue(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useAnimationFrame((t, delta) => {
+    if (isHovered || isDragging) return;
+    
+    // Constant slow marquee moving left
+    const moveBy = -1.5 * (delta / 1000); 
+    
+    baseX.set(baseX.get() + moveBy);
+  });
+
+  const x = useTransform(baseX, (v) => {
+    return `${wrap(-50, 0, v)}%`;
+  });
+
+  const handlePan = (event: any, info: any) => {
+    if (!containerRef.current) return;
+    // Total width is the scrollWidth of the entire max-content div
+    const totalWidth = containerRef.current.scrollWidth;
+    const halfWidth = totalWidth / 2;
+    
+    // Convert pixel delta to percentage delta (relative to halfWidth which represents 50%)
+    const percentageDelta = (info.delta.x / halfWidth) * 50;
+    
+    baseX.set(baseX.get() + percentageDelta);
+  };
+
+  return (
+    <div 
+      className="w-full relative py-8 md:py-12 border-b border-white/10 overflow-hidden cursor-grab active:cursor-grabbing"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <motion.div 
+        ref={containerRef}
+        className="flex gap-4 px-6 md:px-8" 
+        style={{ x, width: "max-content", touchAction: "pan-y" }}
+        onPanStart={() => setIsDragging(true)}
+        onPan={handlePan}
+        onPanEnd={() => setIsDragging(false)}
+      >
+        {[...images, ...images].map((img, i) => (
+          <div key={i} className="relative w-[85vw] md:w-[717px] aspect-[717/538] shrink-0 overflow-hidden bg-white/5 pointer-events-none">
+            <Image
+              src={img}
+              alt={`Slide ${i}`}
+              fill
+              className="object-cover"
+              draggable={false}
+            />
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+const getTechIconUrl = (tech: string) => {
+  const map: Record<string, string> = {
+    'Next.js': 'https://cdn.simpleicons.org/nextdotjs/white',
+    'React': 'https://cdn.simpleicons.org/react/61DAFB',
+    'TypeScript': 'https://cdn.simpleicons.org/typescript/3178C6',
+    'Framer Motion': 'https://cdn.simpleicons.org/framer/white',
+    'Tailwind CSS': 'https://cdn.simpleicons.org/tailwindcss/06B6D4',
+    'GSAP': 'https://cdn.simpleicons.org/greensock/88CE02',
+    'Vite': 'https://cdn.simpleicons.org/vite/646CFF',
+    'Three.js': 'https://cdn.simpleicons.org/threedotjs/white',
+    'WebGL': 'https://cdn.simpleicons.org/webgl/990000',
+    'Lenis': 'https://cdn.simpleicons.org/framer/white'
+  };
+  return map[tech] || 'https://cdn.simpleicons.org/javascript/yellow';
+};
 
 export default function ProjectsPage() {
 
@@ -39,6 +190,7 @@ export default function ProjectsPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('ALL');
   const containerRef = useRef<HTMLDivElement>(null);
+  const modalScrollRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,6 +219,39 @@ export default function ProjectsPage() {
     return () => {
       document.body.style.overflow = 'unset';
       window.dispatchEvent(new Event('unlock-scroll'));
+    };
+  }, [selectedProject]);
+
+  useEffect(() => {
+    let lenis: Lenis | null = null;
+    let rafId: number;
+
+    if (selectedProject && modalScrollRef.current) {
+      lenis = new Lenis({
+        wrapper: modalScrollRef.current,
+        content: modalScrollRef.current.firstElementChild as HTMLElement,
+        duration: 1.0,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 0.8,
+        touchMultiplier: 1.2,
+      });
+
+      const raf = (time: number) => {
+        lenis?.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
+
+      rafId = requestAnimationFrame(raf);
+    }
+
+    return () => {
+      if (lenis) {
+        lenis.destroy();
+        cancelAnimationFrame(rafId);
+      }
     };
   }, [selectedProject]);
 
@@ -150,13 +335,31 @@ export default function ProjectsPage() {
               </div>
 
               {/* Content */}
-              <div className="mt-auto">
-                <p className="text-xs uppercase mb-2 text-white/60 font-medium tracking-wider">
-                  {project.category}
+              <div className="mt-auto flex flex-col gap-3">
+                <div className="flex justify-between items-start gap-4">
+                  <h2 className="text-xl md:text-2xl font-medium uppercase tracking-tight" style={{ fontFamily: 'var(--font-inter)' }}>
+                    {project.title}
+                  </h2>
+                  <span className="text-sm font-mono text-white/50 pt-1 shrink-0">
+                    {project.year}
+                  </span>
+                </div>
+                <p className="text-sm text-white/60 line-clamp-2 leading-relaxed">
+                  {project.overview}
                 </p>
-                <h2 className="text-xl md:text-2xl font-medium" style={{ fontFamily: 'var(--font-inter)' }}>
-                  {project.title}
-                </h2>
+
+                {/* Tech Stack Icons */}
+                <div className="flex items-center gap-3 mt-4">
+                  {project.techStack?.map((tech) => (
+                    <img 
+                      key={tech} 
+                      src={getTechIconUrl(tech)} 
+                      alt={tech} 
+                      title={tech}
+                      className="w-[18px] h-[18px] opacity-70 hover:opacity-100 transition-opacity" 
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           ))}
@@ -188,7 +391,7 @@ export default function ProjectsPage() {
               className="relative w-full h-[calc(100vh-2rem)] md:h-[calc(100vh-4rem)] bg-[#111] rounded-t-2xl md:rounded-t-3xl overflow-hidden flex flex-col z-10 pointer-events-auto"
             >
               {/* Modal Header */}
-              <div className="flex justify-between items-center p-6 md:p-8 shrink-0">
+              <div className="flex justify-between items-center p-6 md:p-8 shrink-0 border-b border-white/10 z-20 bg-[#111]">
                 <div className="flex gap-2 text-sm font-medium">
                   <span>0{selectedProject.id}</span>
                   <span className="text-white/50">—</span>
@@ -211,34 +414,136 @@ export default function ProjectsPage() {
                 </button>
               </div>
 
-              {/* Modal Content - Draggable Image Slider */}
-              <div className="flex-1 w-full relative overflow-hidden" ref={containerRef}>
-                <motion.div
-                  drag="x"
-                  dragConstraints={containerRef}
-                  className="flex gap-4 px-6 md:px-8 h-full pb-8 md:pb-12 cursor-grab active:cursor-grabbing"
-                  style={{ width: "max-content" }}
-                >
-                  {/* First Image */}
-                  <div className="relative w-[85vw] md:w-[70vw] h-full shrink-0 overflow-hidden bg-white/5">
-                     <Image
-                        src={selectedProject.image}
-                        alt={selectedProject.title}
-                        fill
-                        className="object-cover pointer-events-none"
-                      />
-                  </div>
+              {/* Scrollable Modal Content */}
+              <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden w-full" data-lenis-prevent="true" ref={modalScrollRef}>
+                <div className="w-full">
+                  {/* Infinite Marquee Image Slider */}
+                  {selectedProject.images && (
+                    <InfiniteSlider images={selectedProject.images} />
+                  )}
 
-                  {/* Second Image (Dummy for sliding) */}
-                  <div className="relative w-[85vw] md:w-[70vw] h-full shrink-0 overflow-hidden bg-white/5">
-                     <Image
-                        src={selectedProject.image}
-                        alt={`${selectedProject.title} - 2`}
-                        fill
-                        className="object-cover pointer-events-none"
-                      />
+                  {/* Project Details Section */}
+                  <div className="px-6 md:px-8 py-12 md:py-20 max-w-5xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24">
+                    
+                    {/* Left Column (Overview, Challenge, Results) */}
+                    <div className="md:col-span-2 flex flex-col gap-12 md:gap-16">
+                      
+                      {selectedProject.overview && (
+                        <div>
+                          <h4 className="text-xs text-[#FF442B] font-mono uppercase tracking-widest mb-4 flex items-center gap-4">
+                            <span className="w-6 h-[1px] bg-[#FF442B]"></span>
+                            Overview
+                          </h4>
+                          <p className="text-xl md:text-3xl leading-relaxed font-light text-white/90" style={{ fontFamily: 'var(--font-inter)' }}>
+                            {selectedProject.overview}
+                          </p>
+                        </div>
+                      )}
+
+                      {selectedProject.problemAndApproach && (
+                        <div>
+                          <h4 className="text-xs text-[#FF442B] font-mono uppercase tracking-widest mb-4 flex items-center gap-4">
+                            <span className="w-6 h-[1px] bg-[#FF442B]"></span>
+                            Challenge & Approach
+                          </h4>
+                          <p className="text-lg md:text-xl leading-relaxed text-white/60 font-light" style={{ fontFamily: 'var(--font-inter)' }}>
+                            {selectedProject.problemAndApproach}
+                          </p>
+                        </div>
+                      )}
+
+                      {selectedProject.results && selectedProject.results.length > 0 && (
+                        <div>
+                          <h4 className="text-xs text-[#FF442B] font-mono uppercase tracking-widest mb-4 flex items-center gap-4">
+                            <span className="w-6 h-[1px] bg-[#FF442B]"></span>
+                            Results
+                          </h4>
+                          <div className="flex flex-col gap-4">
+                            {selectedProject.results.map((result: string, i: number) => (
+                              <div key={i} className="flex gap-4 items-start p-4 md:p-6 rounded-2xl bg-white/5 border border-white/5">
+                                <div className="w-1.5 h-1.5 mt-2.5 rounded-full bg-[#FF442B] flex-shrink-0" />
+                                <p className="font-light text-base md:text-lg text-white/80 leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
+                                  {result}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                    </div>
+                    
+                    {/* Right Column (Meta Information) */}
+                    <div className="flex flex-col gap-8 pt-2 md:pt-0">
+                      
+                      {selectedProject.role && (
+                        <div>
+                          <h4 className="text-xs text-white/50 uppercase tracking-wider mb-2">Role</h4>
+                          <p className="text-base font-medium">{selectedProject.role}</p>
+                        </div>
+                      )}
+
+                      {selectedProject.year && (
+                        <div>
+                          <h4 className="text-xs text-white/50 uppercase tracking-wider mb-2">Year</h4>
+                          <p className="text-base font-medium">{selectedProject.year}</p>
+                        </div>
+                      )}
+
+                      {selectedProject.techStack && (
+                        <div>
+                          <h4 className="text-xs text-white/50 uppercase tracking-wider mb-2">Tech Stack</h4>
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {selectedProject.techStack.map((tech: string, index: number) => (
+                              <span key={index} className="text-xs font-mono uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Links Section */}
+                      <div className="flex flex-col gap-4 mt-4 pt-8 border-t border-white/10">
+                        {selectedProject.liveLink && (
+                          <a 
+                            href={selectedProject.liveLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="group flex items-center justify-between p-4 rounded-xl border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all"
+                          >
+                            <span className="text-sm font-medium">Live Site</span>
+                            <span className="text-xs font-mono text-white/50 group-hover:text-white transition-colors">↗</span>
+                          </a>
+                        )}
+
+                        {selectedProject.githubLink && (
+                          <a 
+                            href={selectedProject.githubLink === 'PRIVATE FOR NOW' ? '#' : selectedProject.githubLink}
+                            target={selectedProject.githubLink === 'PRIVATE FOR NOW' ? '_self' : '_blank'}
+                            rel="noreferrer"
+                            className={`group flex items-center justify-between p-4 rounded-xl border transition-all ${
+                              selectedProject.githubLink === 'PRIVATE FOR NOW' 
+                                ? 'border-white/5 bg-white/5 opacity-50 cursor-not-allowed' 
+                                : 'border-white/10 hover:border-white/30 hover:bg-white/5'
+                            }`}
+                          >
+                            <span className="text-sm font-medium">Source Code</span>
+                            {selectedProject.githubLink !== 'PRIVATE FOR NOW' && (
+                              <span className="text-xs font-mono text-white/50 group-hover:text-white transition-colors">↗</span>
+                            )}
+                            {selectedProject.githubLink === 'PRIVATE FOR NOW' && (
+                              <span className="text-xs font-mono text-white/50">PRIVATE</span>
+                            )}
+                          </a>
+                        )}
+                      </div>
+
+                    </div>
                   </div>
-                </motion.div>
+                </div>
+                </div>
               </div>
             </motion.div>
           </div>
