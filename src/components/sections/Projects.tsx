@@ -69,14 +69,12 @@ const ProjectCard = ({
           {/* Right: Description Card */}
           <div className="w-full lg:w-[35%] h-[45%] lg:h-full relative">
             <div className={`flex flex-col h-full p-2 lg:py-4 lg:px-4`}>
-              {index === 0 && (
-                <h3 className="font-['Inter_Display'] font-semibold text-base md:text-lg tracking-tight text-white mb-2 md:mb-3 pointer-events-none">
-                  Modern Portfolio
-                </h3>
-              )}
+              <h3 className="font-['Inter_Display'] font-semibold text-base md:text-lg tracking-tight text-white mb-2 md:mb-3 pointer-events-none">
+                {project.title}
+              </h3>
               {/* Year using DM Mono */}
               <p className="font-mono mb-2 md:mb-4 tracking-wider text-sm md:text-base pointer-events-none text-white/60">
-                Jan - Apr 2026
+                {project.year}
               </p>
 
               {/* Description using Inter Display Regular */}
