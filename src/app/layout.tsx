@@ -4,7 +4,7 @@ import Preloader from "@/components/layout/Preloader";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 
 export const metadata: Metadata = {
-  title: "Raihan Daffa - Portfolio",
+  title: "Raihan Daffa - Creative Web Developer",
   description: "Web Developer Portfolio",
 };
 

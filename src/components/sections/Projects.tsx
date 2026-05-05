@@ -91,6 +91,7 @@ const ProjectCard = ({
                 <div className="flex flex-wrap gap-2">
                   {project.techStack?.slice(0, 3).map((tech: string, i: number) => (
                     <div key={i} className="py-2 px-3 lg:px-4 rounded-[1.5rem] flex items-center justify-center bg-white/10">
+                      
                       <p className="font-['Inter_Display'] text-xs lg:text-sm whitespace-nowrap text-white/80">{tech}</p>
                     </div>
                   ))}
