@@ -17,6 +17,7 @@ export interface ProjectType {
   description: string;
   techStack: string[];
   imagePlaceholder: string;
+  images?: string[];
   year?: string;
   overview?: string;
   problemAndApproach?: string;

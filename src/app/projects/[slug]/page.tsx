@@ -2,6 +2,7 @@ import React from 'react';
 import { projectsData } from '@/data';
 import { notFound } from 'next/navigation';
 import { BackButton } from './BackButton';
+import ProjectHeroSlider from '@/components/ui/ProjectHeroSlider';
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -48,16 +49,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
       </header>
 
-      {/* Massive Hero Image */}
+      {/* Massive Hero Image Slider */}
       <section className="w-full px-4 md:px-8 lg:px-12 pb-24 md:pb-40 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300 fill-mode-both">
-        <div className="w-full aspect-[4/3] md:aspect-[21/9] relative rounded-[2rem] overflow-hidden bg-[#1e1e21] border border-white/5">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={project.imagePlaceholder}
-            alt={project.title}
-            className="object-cover w-full h-full"
-          />
-        </div>
+        <ProjectHeroSlider 
+          images={project.images && project.images.length > 0 ? project.images : [project.imagePlaceholder]} 
+          alt={project.title} 
+        />
       </section>
 
       {/* Story Content - Single Column Reading Experience */}
