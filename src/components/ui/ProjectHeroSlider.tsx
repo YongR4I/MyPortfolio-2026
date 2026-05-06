@@ -139,7 +139,7 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
           />
         )}
       </AnimatePresence>
-
+      
       {/* Prev Button */}
       <button
         className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 hover:scale-105 transition-all z-10"

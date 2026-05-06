@@ -3,7 +3,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import ContactFormSection from "@/components/sections/ContactFormSection";
 import Footer from "@/components/layout/Footer";
 import { AnimatePresence } from "framer-motion";
@@ -26,10 +26,13 @@ export default function ContactPage() {
           <button 
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`px-6 py-2 rounded-full border text-xs tracking-widest font-mono uppercase transition-all duration-300 mb-12 relative z-[101]
-              ${isHovered ? 'border-black/40 text-black hover:bg-black/5' : 'border-white/20 text-white hover:bg-white/10'}`}
+            className={`px-7 py-3 rounded-3xl rounded-br-sm border text-xs tracking-widest font-mono uppercase transition-all duration-300 mb-12 relative z-[101] flex items-center justify-center gap-3
+              ${isHovered 
+                ? 'bg-white text-black border-white scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)]' 
+                : 'bg-white/5 text-white border-white/20 hover:bg-white/10 hover:border-white/50 shadow-[0_0_15px_rgba(255,255,255,0.05)]'}`}
           >
-            SAY HI
+            <span className="font-semibold">SAY HI</span>
+            <span className={`text-base transition-transform duration-300 origin-bottom-right ${isHovered ? 'rotate-12 scale-110' : 'rotate-0'}`}>👋</span>
           </button>
 
           <div className="relative inline-flex justify-center">
