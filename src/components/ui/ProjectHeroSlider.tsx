@@ -142,7 +142,7 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
 
       {/* Prev Button */}
       <button
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white/80 hover:text-white hover:bg-black/40 hover:scale-105 transition-all opacity-0 group-hover:opacity-100 z-10"
+        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 hover:scale-105 transition-all z-10"
         onClick={() => paginate(-1)}
         aria-label="Previous image"
       >
@@ -153,7 +153,7 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
 
       {/* Next Button */}
       <button
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white/80 hover:text-white hover:bg-black/40 hover:scale-105 transition-all opacity-0 group-hover:opacity-100 z-10"
+        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 hover:scale-105 transition-all z-10"
         onClick={() => paginate(1)}
         aria-label="Next image"
       >
