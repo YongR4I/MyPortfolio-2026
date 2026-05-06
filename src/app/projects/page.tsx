@@ -236,7 +236,7 @@ export default function ProjectsPage() {
               {/* Image Container */}
               <div className="relative w-full aspect-[4/3] bg-white/5 overflow-hidden mb-6">
                 <Image
-                  src={project.imagePlaceholder || '/images/projectdummy.png'}
+                  src={project.imagePlaceholder || '/images/Projects/projectdummy.png'}
                   alt={project.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
