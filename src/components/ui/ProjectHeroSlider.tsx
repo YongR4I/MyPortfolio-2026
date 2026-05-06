@@ -44,14 +44,26 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
 
   // If there's only one image, just render it without slider controls
   if (images.length === 1) {
+    const isVideo = images[0].toLowerCase().endsWith('.mp4') || images[0].toLowerCase().endsWith('.webm');
     return (
       <div className="w-full aspect-[4/3] md:aspect-[21/9] relative rounded-[2rem] overflow-hidden bg-[#1e1e21] border border-white/5">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={images[0]}
-          alt={alt}
-          className="object-cover w-full h-full pointer-events-none"
-        />
+        {isVideo ? (
+          <video
+            src={images[0]}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="object-cover w-full h-full pointer-events-none"
+          />
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={images[0]}
+            alt={alt}
+            className="object-cover w-full h-full pointer-events-none"
+          />
+        )}
       </div>
     );
   }
@@ -66,33 +78,66 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
   return (
     <div className="w-full aspect-[4/3] md:aspect-[21/9] relative rounded-[2rem] overflow-hidden bg-[#1e1e21] border border-white/5 group">
       <AnimatePresence initial={false} custom={direction}>
-        <motion.img
-          key={page}
-          src={images[imageIndex]}
-          custom={direction}
-          variants={slideVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
-          }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={1}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
+        {images[imageIndex].toLowerCase().endsWith('.mp4') || images[imageIndex].toLowerCase().endsWith('.webm') ? (
+          <motion.video
+            key={page}
+            src={images[imageIndex]}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
 
-            if (swipe < -swipeConfidenceThreshold) {
-              paginate(1);
-            } else if (swipe > swipeConfidenceThreshold) {
-              paginate(-1);
-            }
-          }}
-          alt={`${alt} image ${imageIndex + 1}`}
-          className="absolute object-cover w-full h-full cursor-grab active:cursor-grabbing"
-        />
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute object-cover w-full h-full cursor-grab active:cursor-grabbing"
+          />
+        ) : (
+          <motion.img
+            key={page}
+            src={images[imageIndex]}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            alt={`${alt} image ${imageIndex + 1}`}
+            className="absolute object-cover w-full h-full cursor-grab active:cursor-grabbing"
+          />
+        )}
       </AnimatePresence>
 
       {/* Prev Button */}

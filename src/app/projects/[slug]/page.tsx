@@ -49,10 +49,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
       </header>
 
-      {/* Massive Hero Image Slider */}
+      {/* Massive Hero Image Slider & Video */}
       <section className="w-full px-4 md:px-8 lg:px-12 pb-24 md:pb-40 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300 fill-mode-both">
         <ProjectHeroSlider 
-          images={project.images && project.images.length > 0 ? project.images : [project.imagePlaceholder]} 
+          images={[...(project.images || []), ...(project.video ? [project.video] : [])].length > 0 ? [...(project.images || []), ...(project.video ? [project.video] : [])] : [project.imagePlaceholder]} 
           alt={project.title} 
         />
       </section>
