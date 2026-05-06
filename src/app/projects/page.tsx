@@ -7,100 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform, useMotionValue, useAnimationFrame } from 'framer-motion';
 import Lenis from 'lenis';
 
-const projectsData = [
-  {
-    id: 1,
-    title: "GAVIN SCHNEIDER PRODUCTIONS",
-    category: "DIGITAL DESIGN - WEB DEVELOPMENT",
-    image: "/images/projectdummy.png",
-    images: [
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png"
-    ],
-    overview: "A comprehensive digital platform showcasing high-end production portfolios. The design focuses on large imagery and smooth, elegant interactions to reflect the premium quality of the productions.",
-    problemAndApproach: "The primary challenge was implementing complex, continuous motion graphics without sacrificing web performance and accessibility.",
-    results: [
-      "Achieved a 98+ Lighthouse performance score despite heavy animation usage.",
-      "Established a cohesive, memorable brand identity with custom interactions."
-    ],
-    role: "Frontend Developer",
-    year: "2024",
-    techStack: ["Next.js", "Framer Motion", "Tailwind CSS"],
-    liveLink: "https://your-portfolio.com",
-    githubLink: "PRIVATE FOR NOW"
-  },
-  {
-    id: 2,
-    title: "FRESHMAN",
-    category: "STRATEGY - BRAND IDENTITY - DIGITAL DESIGN - WEB DEVELOPMENT - CREATIVE DIRECTION",
-    image: "/images/projectdummy.png",
-    images: [
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png"
-    ],
-    overview: "A complete brand overhaul and digital presence for Freshman. The project encompassed everything from strategic positioning to a fully bespoke e-commerce experience.",
-    problemAndApproach: "E-commerce sites often suffer from bloated state management and clunky cart interactions. I utilized React with TypeScript to establish a strictly typed, predictable state flow.",
-    results: [
-      "Designed a frictionless, single-page checkout flow.",
-      "Implemented advanced GSAP scroll animations maintaining 60fps."
-    ],
-    role: "Full Stack Developer",
-    year: "2025",
-    techStack: ["React", "TypeScript", "GSAP"],
-    liveLink: "https://project-two.com",
-    githubLink: "https://github.com/yourusername/project-two"
-  },
-  {
-    id: 3,
-    title: "MOON EVENT",
-    category: "EVENT - DIGITAL DESIGN",
-    image: "/images/projectdummy.png",
-    images: [
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png"
-    ],
-    overview: "An immersive digital invitation and event management platform. Built to handle high traffic and provide a seamless RSVP experience with interactive 3D elements.",
-    problemAndApproach: "Rendering thousands of particles dynamically in the browser usually leads to severe frame drops. I bypassed the standard DOM completely, relying on raw Canvas API and Three.js.",
-    results: [
-      "Maintained a stable 60fps while rendering over 50,000 active particles.",
-      "Successfully synced real-time audio frequency data with GPU shader uniforms."
-    ],
-    role: "Creative Developer",
-    year: "2023",
-    techStack: ["Vite", "Three.js", "WebGL"],
-    liveLink: "https://project-three.com",
-    githubLink: "https://github.com/yourusername/project-three"
-  },
-  {
-    id: 4,
-    title: "AESOP ROZU",
-    category: "WEB DEVELOPMENT - DIGITAL DESIGN",
-    image: "/images/projectdummy.png",
-    images: [
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png",
-      "/images/projectdummy.png"
-    ],
-    overview: "An interactive product showcase for the Rozu fragrance. The site features sensory-driven design, subtle animations, and performance-optimized media delivery.",
-    problemAndApproach: "Creating a seamless sensory experience required careful coordination of visual assets and smooth animations while keeping load times minimal.",
-    results: [
-      "Implemented an intuitive scroll-driven narrative.",
-      "Optimized high-resolution image delivery with Next.js Image component."
-    ],
-    role: "UI/UX Developer",
-    year: "2024",
-    techStack: ["Next.js", "Lenis", "GSAP"],
-    liveLink: "https://aesop-rozu.com",
-    githubLink: "https://github.com/yourusername/aesop"
-  }
-];
+import { projectsData } from '@/data';
 
 const wrap = (min: number, max: number, v: number) => {
   const rangeSize = max - min;
@@ -153,14 +60,16 @@ const InfiniteSlider = ({ images }: { images: string[] }) => {
         onPanEnd={() => setIsDragging(false)}
       >
         {[...images, ...images].map((img, i) => (
-          <div key={i} className="relative w-[85vw] md:w-[717px] aspect-[717/538] shrink-0 overflow-hidden bg-white/5 pointer-events-none">
-            <Image
+          <div key={i} className="relative shrink-0 overflow-hidden bg-white/5 rounded-[1rem] group">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={img}
               alt={`Slide ${i}`}
-              fill
-              className="object-cover"
+              className="h-[40vh] md:h-[500px] w-auto object-contain block transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:brightness-110"
               draggable={false}
             />
+            {/* Subtle glow/overlay on hover */}
+            <div className="absolute inset-0 border border-white/0 group-hover:border-white/20 transition-colors duration-700 rounded-[1rem] pointer-events-none" />
           </div>
         ))}
       </motion.div>
@@ -310,7 +219,7 @@ export default function ProjectsPage() {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 mt-12 md:mt-16">
-          {projectsData.map((project, index) => (
+          {projectsData.slice(0, 2).map((project, index) => (
             <div
               key={project.id}
               onClick={() => setSelectedProject(project)}
@@ -327,7 +236,7 @@ export default function ProjectsPage() {
               {/* Image Container */}
               <div className="relative w-full aspect-[4/3] bg-white/5 overflow-hidden mb-6">
                 <Image
-                  src={project.image}
+                  src={project.imagePlaceholder || '/images/projectdummy.png'}
                   alt={project.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"

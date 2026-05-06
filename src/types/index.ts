@@ -25,4 +25,5 @@ export interface ProjectType {
   results?: string[];
   liveLink?: string;
   githubLink?: string;
+  role?: string;
 }
