@@ -88,7 +88,14 @@ const getTechIconUrl = (tech: string) => {
     'Vite': 'https://cdn.simpleicons.org/vite/646CFF',
     'Three.js': 'https://cdn.simpleicons.org/threedotjs/white',
     'WebGL': 'https://cdn.simpleicons.org/webgl/990000',
-    'Lenis': 'https://cdn.simpleicons.org/framer/white'
+    'Lenis': 'https://cdn.simpleicons.org/framer/white',
+    'Supabase': 'https://cdn.simpleicons.org/supabase/3ECF8E',
+    'Figma': 'https://cdn.simpleicons.org/figma/F24E1E',
+    'Node.js': 'https://cdn.simpleicons.org/nodedotjs/339933',
+    'Express': 'https://cdn.simpleicons.org/express/white',
+    'Firebase': 'https://cdn.simpleicons.org/firebase/FFCA28',
+    'Groq': 'https://cdn.simpleicons.org/openai/white',
+    'React Router': 'https://cdn.simpleicons.org/reactrouter/CA4245'
   };
   return map[tech] || 'https://cdn.simpleicons.org/javascript/yellow';
 };
@@ -257,16 +264,25 @@ export default function ProjectsPage() {
                   {project.overview}
                 </p>
 
-                {/* Tech Stack Icons */}
-                <div className="flex items-center gap-3 mt-4">
-                  {project.techStack?.map((tech) => (
-                    <img 
-                      key={tech} 
-                      src={getTechIconUrl(tech)} 
-                      alt={tech} 
-                      title={tech}
-                      className="w-[18px] h-[18px] opacity-70 hover:opacity-100 transition-opacity" 
-                    />
+                {/* Tech Stack Icons with Tooltips */}
+                <div className="flex items-center gap-4 mt-4">
+                  {project.techStack?.map((tech: string) => (
+                    <div key={tech} className="relative group/tech flex items-center justify-center">
+                      <div 
+                        className="absolute bottom-full mb-3 px-3 py-1.5 bg-[#1e1e21] border border-white/10 rounded-lg opacity-0 group-hover/tech:opacity-100 translate-y-2 group-hover/tech:translate-y-0 pointer-events-none z-50 whitespace-nowrap shadow-2xl transition-all duration-300 ease-out"
+                      >
+                        <p className="font-['Inter_Display'] text-[11px] font-medium text-white tracking-wide">
+                          {tech}
+                        </p>
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1e1e21] border-r border-b border-white/10 rotate-45 -mt-1" />
+                      </div>
+
+                      <img 
+                        src={getTechIconUrl(tech)} 
+                        alt={tech} 
+                        className="w-[20px] h-[20px] opacity-60 group-hover/tech:opacity-100 transition-all duration-300" 
+                      />
+                    </div>
                   ))}
                 </div>
               </div>

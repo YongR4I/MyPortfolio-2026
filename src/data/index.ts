@@ -16,9 +16,17 @@ export const projectsData: ProjectType[] = [
     slug: "modern-portfolio",
     title: "Modern Portfolio",
     description: "Building a personal brand required a balance between high-end aesthetics and smooth performance. I approached this by implementing a motion-first architecture using Next.js 15 and Framer Motion, resulting in a seamless, immersive experience that communicates professionalism through every interaction. The result is a highly polished digital presence that effectively showcases my capabilities.",
-    techStack: ["Immersive UX", "Smooth Transition", "Performance Focus"],
+    techStack: ["Next.js", "Framer Motion", "TypeScript", "Tailwind CSS"],
     imagePlaceholder: "/images/CardProject/mockup.jpg",
-    images: ["/images/CardProject/mockup.jpg",],
+    images: [
+      "/images/CardProject/mockup.jpg",
+    
+      "/images/CardProject/project1.png",
+      "/images/CardProject/project2.png",
+      "/images/CardProject/project3.png",
+        "/images/CardProject/project4.png",
+      
+    ],
     video: "/Vidios/vidio.mp4",
     year: "March - Apr 2026",
     overview: "A personal digital playground designed to reflect my identity as a creative developer. Rather than relying on standard templates, I wanted to build a bespoke experience that feels alive. It serves not just as a gallery of my past work, but as a living proof of my skills in bridging the gap between intricate design and solid front-end engineering.",
@@ -28,15 +36,15 @@ export const projectsData: ProjectType[] = [
       "Reduced Cumulative Layout Shift (CLS) to near zero through strict layout boundaries.",
       "Established a cohesive, memorable brand identity with custom interactions."
     ],
-    liveLink: "https://your-portf olio.com",
-    githubLink: "PRIVATE FOR NOW"
+    liveLink: "https://raihandaffa.vercel.app/",
+    githubLink: "https://github.com/YongR4I/MyPortfolio-2026"
   },
   {
     id: 2,
     slug: "finlitgo",
     title: "FinLitGo — Digital Literacy & Financial Management",
     description: "Addressing the paradox of low financial literacy amidst rapid fintech adoption, FinLitGo is an adaptive educational platform that integrates practical cash flow management with an intelligent AI-driven assistant. It bridges the gap between static theory and real-world financial application.",
-    techStack: ["Financial Technology", "Personalized UX", "AI Implementation"],
+    techStack: ["React", "Supabase", "Node.js", "Tailwind CSS"],
     imagePlaceholder: "/images/CardProject/finmockup.png",
     images: [
       "/images/CardProject/finmockup.png",
@@ -64,7 +72,7 @@ export const projectsData: ProjectType[] = [
     slug: "project-three",
     title: "Project Three",
     description: "An experimental web application pushing the boundaries of what's possible in the browser. Leveraging WebGL and custom shaders, I created an interactive 3D environment that responds in real-time to user inputs and audio frequencies. This required deep optimization to maintain 60fps.",
-    techStack: ["Vite", "Canvas API", "Three.js"],
+    techStack: ["Three.js", "WebGL", "Vite"],
     imagePlaceholder: "/images/Projects/projectdummy.png",
     images: ["/images/Projects/projectdummy.png", "/images/About/About.jpg", "/images/CardProject/mockup.jpg"],
     year: "Jun - Aug 2025",

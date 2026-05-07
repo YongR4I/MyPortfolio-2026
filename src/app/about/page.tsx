@@ -25,6 +25,7 @@ const experiencesData = [
     status: 'Student',
     image: '/images/Experience/smkn.jpg',
     images: [
+      '/images/Experience/smkn/8.png',
       '/images/Experience/smkn/1.png',
       '/images/Experience/smkn/2.png',
       '/images/Experience/smkn/3.png',
@@ -83,9 +84,8 @@ const experiencesData = [
     status: 'Freelance',
     image: '/images/Experience/f.png',
     images: [
-      '/images/Experience/freelance/f.png',
-      '/images/Experience/smkn.jpg',
-      '/images/Experience/codingcamp.png',
+      '/images/Experience/freelance/1.png',
+      '/images/Experience/freelance/2.png',
     ],
     takeaways: [
       'Digital Transformation',

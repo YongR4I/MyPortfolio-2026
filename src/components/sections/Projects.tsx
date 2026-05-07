@@ -12,6 +12,27 @@ import { useTransition } from '@/context/TransitionContext';
  * Setiap proyek ditampilkan sebagai satu "Page Section" besar.
  */
 
+const getTechIconUrl = (tech: string) => {
+  const map: Record<string, string> = {
+    'Next.js': 'https://cdn.simpleicons.org/nextdotjs/white',
+    'React': 'https://cdn.simpleicons.org/react/61DAFB',
+    'TypeScript': 'https://cdn.simpleicons.org/typescript/3178C6',
+    'Framer Motion': 'https://cdn.simpleicons.org/framer/white',
+    'Tailwind CSS': 'https://cdn.simpleicons.org/tailwindcss/06B6D4',
+    'Vite': 'https://cdn.simpleicons.org/vite/646CFF',
+    'Three.js': 'https://cdn.simpleicons.org/threedotjs/white',
+    'WebGL': 'https://cdn.simpleicons.org/webgl/990000',
+    'Supabase': 'https://cdn.simpleicons.org/supabase/3ECF8E',
+    'Figma': 'https://cdn.simpleicons.org/figma/F24E1E',
+    'Node.js': 'https://cdn.simpleicons.org/nodedotjs/339933',
+    'Express': 'https://cdn.simpleicons.org/express/white',
+    'Firebase': 'https://cdn.simpleicons.org/firebase/FFCA28',
+    'Groq': 'https://cdn.simpleicons.org/openai/white', // Fallback ke icon AI karena Groq belum ada di SimpleIcons
+    'React Router': 'https://cdn.simpleicons.org/reactrouter/CA4245'
+  };
+  return map[tech] || 'https://cdn.simpleicons.org/javascript/yellow';
+};
+
 const ProjectCard = ({
   project,
   index,
@@ -84,18 +105,35 @@ const ProjectCard = ({
                 </p>
               </div>
 
-              {/* List / Table */}
+              {/* List / Tech Stack with Tooltips */}
               <div className="flex justify-between items-end mt-auto pointer-events-none gap-4">
-                <div className="flex flex-wrap gap-2">
-                  {project.techStack?.slice(0, 3).map((tech: string, i: number) => (
-                    <div key={i} className="py-2 px-3 lg:px-4 rounded-[1.5rem] flex items-center justify-center bg-white/10">
-                      
-                      <p className="font-['Inter_Display'] text-xs lg:text-sm whitespace-nowrap text-white/80">{tech}</p>
+                <div className="flex flex-wrap gap-3">
+                  {project.techStack?.slice(0, 5).map((tech: string, i: number) => (
+                    <div key={i} className="relative group/tech flex items-center justify-center">
+                      {/* Tooltip Content - Muncul saat group/tech di-hover */}
+                      <div 
+                        className="absolute bottom-full mb-3 px-3 py-1.5 bg-[#1e1e21] border border-white/10 rounded-lg opacity-0 group-hover/tech:opacity-100 translate-y-2 group-hover/tech:translate-y-0 pointer-events-none z-50 whitespace-nowrap shadow-2xl transition-all duration-300 ease-out"
+                      >
+                        <p className="font-['Inter_Display'] text-[11px] font-medium text-white tracking-wide">
+                          {tech}
+                        </p>
+                        {/* Tooltip Arrow */}
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1e1e21] border-r border-b border-white/10 rotate-45 -mt-1" />
+                      </div>
+
+                      {/* Icon Container */}
+                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 group-hover/tech:bg-white/10 group-hover/tech:border-white/20 transition-all duration-300 pointer-events-auto cursor-help">
+                        <img 
+                          src={getTechIconUrl(tech)} 
+                          alt={tech} 
+                          className="w-5 h-5 lg:w-6 lg:h-6 object-contain opacity-60 group-hover/tech:opacity-100 transition-opacity"
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-white">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-white pointer-events-auto transition-transform hover:scale-110 active:scale-95">
                   <svg width="20" height="20" className="lg:w-6 lg:h-6 -rotate-[60deg]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12H19" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M12 5L19 12L12 19" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
