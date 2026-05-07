@@ -25,10 +25,14 @@ const experiencesData = [
     status: 'Student',
     image: '/images/Experience/smkn.jpg',
     images: [
-      '/images/Experience/smkn/smkn.jpg',
-      '/images/Experience/smkn/smkn2.png',
-      '/images/Experience/smkn/smkn3.png',
-      '/images/Experience/smkn/smkn4.png',
+      '/images/Experience/smkn/1.png',
+      '/images/Experience/smkn/2.png',
+      '/images/Experience/smkn/3.png',
+      '/images/Experience/smkn/4.png',
+      '/images/Experience/smkn/5.png',
+      '/images/Experience/smkn/6.png',
+      '/images/Experience/smkn/7.png',
+
     ],
     takeaways: [
       'Laravel, React, Vite, PHP',
