@@ -234,8 +234,7 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
                   exit={{ opacity: 0 }}
                   transition={{
                     opacity: { duration: 0.5, ease: 'easeOut' },
-                    scale: { duration: 2.4, ease: 'linear' },
-                    exit: { duration: 0.5, ease: 'easeOut' }
+                    scale: { duration: 2.4, ease: 'linear' }
                   }}
                   onLoad={() => imgRef.current && setImgHeight(imgRef.current.offsetHeight)}
                 />
