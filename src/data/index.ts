@@ -28,7 +28,7 @@ export const projectsData: ProjectType[] = [
       "Reduced Cumulative Layout Shift (CLS) to near zero through strict layout boundaries.",
       "Established a cohesive, memorable brand identity with custom interactions."
     ],
-    liveLink: "https://your-portfolio.com",
+    liveLink: "https://your-portf olio.com",
     githubLink: "PRIVATE FOR NOW"
   },
   {

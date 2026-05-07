@@ -15,8 +15,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import Link from 'next/link';
-
-const HERO_HEIGHT = 360;
+import { useTransition } from '@/context/TransitionContext';
 
 const experiencesData = [
   {
@@ -68,7 +67,7 @@ const experiencesData = [
     period: 'Jan 2025 - Present',
     role: 'Creative Digital Strategist',
     status: 'Freelance',
-    image: '/images/Experience/freelancer.png',
+    image: '/images/Experience/f.png',
     takeaways: [
       'Digital Transformation',
       'Cinematic Branding',
@@ -91,10 +90,13 @@ const experiencesData = [
 const ExperienceOverlay = ({ item, onClose }: any) => {
   const imgRef = useRef<HTMLImageElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [imgHeight, setImgHeight] = useState(280);
+  const [imgHeight, setImgHeight] = useState(0);
+  const [overlayScroll, setOverlayScroll] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    setImgHeight(0);
+    setOverlayScroll(0);
     const measure = () => {
       if (imgRef.current) setImgHeight(imgRef.current.offsetHeight);
     };
@@ -114,6 +116,11 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
 
       lenisRef.current = lenis;
 
+      const syncScroll = () => {
+        setOverlayScroll(scrollRef.current?.scrollTop ?? 0);
+      };
+      lenis.on('scroll', syncScroll);
+
       let rafId: number;
       function raf(time: number) {
         lenis.raf(time);
@@ -122,6 +129,7 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
       rafId = requestAnimationFrame(raf);
 
       return () => {
+        lenis.off('scroll', syncScroll);
         cancelAnimationFrame(rafId);
         lenis.destroy();
         window.removeEventListener('resize', measure);
@@ -130,6 +138,16 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
 
     return () => window.removeEventListener('resize', measure);
   }, [item.image]);
+
+  const handleOverlayScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setOverlayScroll(e.currentTarget.scrollTop);
+  };
+
+  const scrollHintHideAfter =
+    imgHeight > 0
+      ? Math.min(300, Math.max(100, imgHeight * 0.72))
+      : 140;
+  const scrollHintOpacity = overlayScroll < scrollHintHideAfter ? 1 : 0;
 
   return (
     <motion.div
@@ -162,35 +180,77 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
           </svg>
         </button>
 
-        {/* ── Image Section (Parallax within card) ── */}
+        {/* ── Image Section — full intrinsic aspect (e.g. smkn.jpg 1024×576) ── */}
         {item.image && (
-          <div className="absolute top-0 left-0 right-0 z-0 h-[50vh]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              ref={imgRef}
-              src={item.image}
-              alt={item.title}
-              className="w-full h-full object-cover block"
-            />
-            {/* Gradient fade at bottom */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
-            {/* Period badge */}
-            <span className="absolute bottom-5 left-6 md:left-12 font-mono text-xs tracking-widest uppercase text-white/60">
-              {item.period}
-            </span>
+          <div className="absolute top-0 left-0 right-0 z-0 w-full pointer-events-none">
+            <div className="relative w-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                ref={imgRef}
+                src={item.image}
+                alt={item.title}
+                onLoad={() => imgRef.current && setImgHeight(imgRef.current.offsetHeight)}
+                className="w-full h-auto block"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent pointer-events-none" />
+              <span className="absolute bottom-5 left-6 md:left-12 font-mono text-xs tracking-widest uppercase text-white/60 pointer-events-none">
+                {item.period}
+              </span>
+            </div>
           </div>
+        )}
+
+        {/* Scroll hint — pinned to card (not inside scroll) so it stays on the photo while scrolling */}
+        {item.image && (
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute right-6 z-[25] flex items-center gap-1 md:right-12"
+            style={{
+              top:
+                imgHeight > 0
+                  ? Math.max(
+                      12,
+                      imgHeight -
+                        Math.min(
+                          11 * 16,
+                          Math.max(6 * 16, imgHeight * 0.42)
+                        )
+                    )
+                  : '32vh',
+            }}
+            animate={{ opacity: scrollHintOpacity }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+          >
+            <span
+              className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/95"
+              style={{ textShadow: '0 0 10px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.95)' }}
+            >
+              Scroll
+            </span>
+            <motion.span
+              className="text-white/90"
+              style={{ filter: 'drop-shadow(0 0 5px rgba(0,0,0,0.9))' }}
+              animate={{ y: [0, 3, 0] }}
+              transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </motion.span>
+          </motion.div>
         )}
 
         {/* ── Scroll container ── */}
         <div
           ref={scrollRef}
+          onScroll={handleOverlayScroll}
           className="absolute inset-0 z-10 overflow-y-auto overscroll-contain"
         >
           <div className="lenis-content flex flex-col w-full">
-            {/* Transparent spacer — determines initial image visibility */}
+            {/* Spacer height matches hero image so scroll panel aligns with full image */}
             <div
-              style={{ height: '45vh' }}
-              className="cursor-pointer flex-shrink-0"
+              style={{ height: imgHeight > 0 ? imgHeight : undefined }}
+              className={`cursor-pointer flex-shrink-0 ${imgHeight <= 0 ? 'min-h-[40vh]' : ''}`}
               onClick={onClose}
             />
 
@@ -259,6 +319,7 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
 
 
 export default function AboutPage() {
+  const { navigateWithTransition } = useTransition();
   const experienceRef = useRef<HTMLDivElement>(null);
   const [selectedExp, setSelectedExp] = useState<number | null>(null);
     
@@ -388,14 +449,16 @@ export default function AboutPage() {
 
       {/* ── Hero ── */}
       <section
-        className="sticky top-0 left-0 w-full overflow-hidden h-[60vh] md:h-[360px] z-[1]"
+        className="sticky top-0 left-0 relative w-full overflow-hidden z-[1]"
       >
         <Image
           src="/images/About/About.jpg"
           alt="About Hero Background"
-          fill
+          width={1000}
+          height={234}
           priority
-          className="object-cover object-center"
+          sizes="100vw"
+          className="w-full h-auto object-center block"
         />
 
         <div
@@ -487,7 +550,14 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="md:w-[36%] flex justify-end items-end mt-12 md:mt-0">
-                <Link href="/contact" className="px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] hover:bg-white/5 transition-colors">
+                <Link
+                  href="/contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateWithTransition('/contact');
+                  }}
+                  className="px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] hover:bg-white/5 transition-colors"
+                >
                   Let&apos;s Talk
                 </Link>
               </div>
