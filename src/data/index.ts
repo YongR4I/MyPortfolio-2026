@@ -56,8 +56,8 @@ export const projectsData: ProjectType[] = [
       "Smart Financial Dashboard: Developed an intuitive tracking system allowing users to monitor income, expenses, and overall financial health.",
       "Comprehensive Curriculum: Structured a tiered educational module system ranging from foundational literacy to long-term investment strategies."
     ],
-    liveLink: "https://project-two.com",
-    githubLink: "https://github.com/yourusername/project-two"
+    liveLink: "https://finlitgo.vercel.app/",
+    githubLink: "https://github.com/finlitgo-app/finlitgo-app"
   },
   {
     id: 3,
