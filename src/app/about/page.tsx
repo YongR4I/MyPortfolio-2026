@@ -54,9 +54,9 @@ const experiencesData = [
     status: 'Developer',
     image: '/images/Experience/codingcamp.png',
     images: [
-      '/images/Experience/codingcamp.png',
-      '/images/Experience/smkn.jpg',
-      '/images/Experience/f.png',
+      '/images/Experience/codingcamp/codingcamp.png',
+      '/images/Experience/codingcamp/codingcamp2.png',
+      '/images/Experience/codingcamp/codingcamp3.png',
     ],
     takeaways: [
       'React 19 & Vite Ecosystem',
@@ -79,7 +79,7 @@ const experiencesData = [
     status: 'Freelance',
     image: '/images/Experience/f.png',
     images: [
-      '/images/Experience/f.png',
+      '/images/Experience/freelance/f.png',
       '/images/Experience/smkn.jpg',
       '/images/Experience/codingcamp.png',
     ],
@@ -174,7 +174,7 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
 
     const id = window.setInterval(() => {
       setActiveImageIndex((prev) => (prev + 1) % images.length);
-    }, 1800);
+    }, 2400);
     return () => window.clearInterval(id);
   }, [images.join('|')]);
 
@@ -220,7 +220,7 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
         {/* ── Image Section — supports autoplay slideshow via item.images[] ── */}
         {images.length > 0 && (
           <div className="absolute top-0 left-0 right-0 z-0 w-full pointer-events-none">
-            <div className="relative w-full">
+            <div className="relative w-full overflow-hidden">
               <AnimatePresence mode="wait" initial={false}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <motion.img
@@ -228,27 +228,78 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
                   ref={imgRef as any}
                   src={images[activeImageIndex]}
                   alt={item.title}
-                  className="w-full h-auto block"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  className="w-full h-auto block origin-center"
+                  initial={{ opacity: 0, scale: 1 }}
+                  animate={{ opacity: 1, scale: 1.05 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.45, ease: 'easeOut' }}
+                  transition={{
+                    opacity: { duration: 0.5, ease: 'easeOut' },
+                    scale: { duration: 2.4, ease: 'linear' },
+                    exit: { duration: 0.5, ease: 'easeOut' }
+                  }}
                   onLoad={() => imgRef.current && setImgHeight(imgRef.current.offsetHeight)}
                 />
               </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent pointer-events-none" />
+
+              {/* Progress Indicators */}
+              {images.length > 1 && (
+                <div className="absolute bottom-[3.25rem] left-6 right-6 md:left-12 md:right-12 z-[30] flex gap-2 pointer-events-none">
+                  {images.map((_, idx) => (
+                    <div key={idx} className="h-[2px] flex-1 bg-white/20 rounded-full overflow-hidden">
+                      {idx === activeImageIndex && (
+                        <motion.div
+                          className="h-full bg-white/90"
+                          initial={{ width: "0%" }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 2.4, ease: "linear" }}
+                        />
+                      )}
+                      {idx < activeImageIndex && (
+                        <div className="h-full w-full bg-white/90" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <span className="absolute bottom-5 left-6 md:left-12 font-mono text-xs tracking-widest uppercase text-white/60 pointer-events-none">
                 {item.period}
               </span>
+
+              {/* Scroll hint — pinned to image container to align with period text */}
+              <motion.div
+                aria-hidden
+                className="absolute bottom-5 right-6 z-[25] flex items-center gap-1 md:right-12 pointer-events-none md:hidden"
+                animate={{ opacity: scrollHintOpacity }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
+              >
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/95"
+                  style={{ textShadow: '0 0 10px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.95)' }}
+                >
+                  Scroll
+                </span>
+                <motion.span
+                  className="text-white/90"
+                  style={{ filter: 'drop-shadow(0 0 5px rgba(0,0,0,0.9))' }}
+                  animate={{ y: [0, 3, 0] }}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </motion.span>
+              </motion.div>
             </div>
           </div>
         )}
 
-        {/* Scroll hint — pinned to card (not inside scroll) so it stays on the photo while scrolling */}
+        {/* Scroll hint for Desktop — pinned to card (not inside scroll) so it stays on the photo while scrolling */}
         {images.length > 0 && (
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute right-6 z-[25] flex items-center gap-1 md:right-12"
+            className="pointer-events-none absolute right-6 z-[25] hidden md:flex items-center gap-1 md:right-12"
             style={{
               top:
                 imgHeight > 0
@@ -371,6 +422,29 @@ export default function AboutPage() {
   const [hasSeen, setHasSeen] = useState(false);
   const [selectedCert, setSelectedCert] = useState<number | null>(null);
 
+  // Sync Experience overlay with URL hash for refresh persistence
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash.startsWith('#exp-')) {
+        const idx = parseInt(hash.split('-')[1], 10);
+        if (!isNaN(idx) && idx >= 0 && idx < experiencesData.length) {
+          setSelectedExp(idx);
+        }
+      }
+    }
+  }, []);
+
+  const handleOpenExp = (index: number) => {
+    setSelectedExp(index);
+    window.history.replaceState(null, '', `#exp-${index}`);
+  };
+
+  const handleCloseExp = () => {
+    setSelectedExp(null);
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  };
+
   useEffect(() => {
     const isLocked = selectedCert !== null || selectedExp !== null;
 
@@ -492,7 +566,7 @@ export default function AboutPage() {
 
       {/* ── Hero ── */}
       <section
-        className="sticky top-0 left-0 relative w-full overflow-hidden z-[1]"
+        className="sticky top-0 left-0 relative w-full h-[50vh] md:h-auto overflow-hidden z-[1]"
       >
         <Image
           src="/images/About/About.jpg"
@@ -501,7 +575,7 @@ export default function AboutPage() {
           height={234}
           priority
           sizes="100vw"
-          className="w-full h-auto object-center block"
+          className="w-full h-full md:h-auto object-cover object-center block"
         />
 
         <div
@@ -593,8 +667,9 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="md:w-[36%] flex justify-end items-end mt-12 md:mt-0">
-                <Link href="/contact" className="px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] hover:bg-white/5 transition-colors">
-                  Let&apos;s Talk
+                <Link href="/contact" className="relative overflow-hidden px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] group transition-colors">
+                  <span className="relative z-10">Let&apos;s Talk</span>
+                  <div className="absolute inset-0 bg-[#FF442B] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </Link>
               </div>
             </div>
@@ -626,7 +701,7 @@ export default function AboutPage() {
             {experiencesData.map((exp, index) => (
               <motion.button
                 key={exp.id}
-                onClick={() => setSelectedExp(index)}
+                onClick={() => handleOpenExp(index)}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -726,7 +801,7 @@ export default function AboutPage() {
         {selectedExp !== null && (
           <ExperienceOverlay
             item={experiencesData[selectedExp]}
-            onClose={() => setSelectedExp(null)}
+            onClose={handleCloseExp}
           />
         )}
       </AnimatePresence>
