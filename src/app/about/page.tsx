@@ -15,7 +15,6 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import Link from 'next/link';
-import { useTransition } from '@/context/TransitionContext';
 
 const experiencesData = [
   {
@@ -25,6 +24,12 @@ const experiencesData = [
     role: 'Software Engineering Lead & Full-Stack Developer',
     status: 'Student',
     image: '/images/Experience/smkn.jpg',
+    images: [
+      '/images/Experience/smkn/smkn.jpg',
+      '/images/Experience/smkn/smkn2.png',
+      '/images/Experience/smkn/smkn3.png',
+      '/images/Experience/smkn/smkn4.png',
+    ],
     takeaways: [
       'Laravel, React, Vite, PHP',
       'MySQL & Supabase',
@@ -48,6 +53,11 @@ const experiencesData = [
     role: 'DBS Foundation Tech Cohort',
     status: 'Developer',
     image: '/images/Experience/codingcamp.png',
+    images: [
+      '/images/Experience/codingcamp.png',
+      '/images/Experience/smkn.jpg',
+      '/images/Experience/f.png',
+    ],
     takeaways: [
       'React 19 & Vite Ecosystem',
       'Supabase Integration',
@@ -68,6 +78,11 @@ const experiencesData = [
     role: 'Creative Digital Strategist',
     status: 'Freelance',
     image: '/images/Experience/f.png',
+    images: [
+      '/images/Experience/f.png',
+      '/images/Experience/smkn.jpg',
+      '/images/Experience/codingcamp.png',
+    ],
     takeaways: [
       'Digital Transformation',
       'Cinematic Branding',
@@ -92,11 +107,20 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [imgHeight, setImgHeight] = useState(0);
   const [overlayScroll, setOverlayScroll] = useState(0);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
+
+  const images: string[] =
+    Array.isArray(item?.images) && item.images.length > 0
+      ? item.images
+      : item?.image
+        ? [item.image]
+        : [];
 
   useEffect(() => {
     setImgHeight(0);
     setOverlayScroll(0);
+    setActiveImageIndex(0);
     const measure = () => {
       if (imgRef.current) setImgHeight(imgRef.current.offsetHeight);
     };
@@ -139,14 +163,27 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
     return () => window.removeEventListener('resize', measure);
   }, [item.image]);
 
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    // Preload next images so the swap is obvious & instant
+    images.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+
+    const id = window.setInterval(() => {
+      setActiveImageIndex((prev) => (prev + 1) % images.length);
+    }, 1800);
+    return () => window.clearInterval(id);
+  }, [images.join('|')]);
+
   const handleOverlayScroll = (e: React.UIEvent<HTMLDivElement>) => {
     setOverlayScroll(e.currentTarget.scrollTop);
   };
 
   const scrollHintHideAfter =
-    imgHeight > 0
-      ? Math.min(300, Math.max(100, imgHeight * 0.72))
-      : 140;
+    imgHeight > 0 ? Math.max(88, Math.min(imgHeight * 0.45, 220)) : 120;
   const scrollHintOpacity = overlayScroll < scrollHintHideAfter ? 1 : 0;
 
   return (
@@ -180,18 +217,25 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
           </svg>
         </button>
 
-        {/* ── Image Section — full intrinsic aspect (e.g. smkn.jpg 1024×576) ── */}
-        {item.image && (
+        {/* ── Image Section — supports autoplay slideshow via item.images[] ── */}
+        {images.length > 0 && (
           <div className="absolute top-0 left-0 right-0 z-0 w-full pointer-events-none">
             <div className="relative w-full">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                ref={imgRef}
-                src={item.image}
-                alt={item.title}
-                onLoad={() => imgRef.current && setImgHeight(imgRef.current.offsetHeight)}
-                className="w-full h-auto block"
-              />
+              <AnimatePresence mode="wait" initial={false}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <motion.img
+                  key={images[activeImageIndex]}
+                  ref={imgRef as any}
+                  src={images[activeImageIndex]}
+                  alt={item.title}
+                  className="w-full h-auto block"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.45, ease: 'easeOut' }}
+                  onLoad={() => imgRef.current && setImgHeight(imgRef.current.offsetHeight)}
+                />
+              </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent pointer-events-none" />
               <span className="absolute bottom-5 left-6 md:left-12 font-mono text-xs tracking-widest uppercase text-white/60 pointer-events-none">
                 {item.period}
@@ -201,7 +245,7 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
         )}
 
         {/* Scroll hint — pinned to card (not inside scroll) so it stays on the photo while scrolling */}
-        {item.image && (
+        {images.length > 0 && (
           <motion.div
             aria-hidden
             className="pointer-events-none absolute right-6 z-[25] flex items-center gap-1 md:right-12"
@@ -319,7 +363,6 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
 
 
 export default function AboutPage() {
-  const { navigateWithTransition } = useTransition();
   const experienceRef = useRef<HTMLDivElement>(null);
   const [selectedExp, setSelectedExp] = useState<number | null>(null);
     
@@ -550,14 +593,7 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="md:w-[36%] flex justify-end items-end mt-12 md:mt-0">
-                <Link
-                  href="/contact"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigateWithTransition('/contact');
-                  }}
-                  className="px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] hover:bg-white/5 transition-colors"
-                >
+                <Link href="/contact" className="px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] hover:bg-white/5 transition-colors">
                   Let&apos;s Talk
                 </Link>
               </div>
