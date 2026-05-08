@@ -32,7 +32,19 @@ export default function ContactPage() {
                 : 'bg-white/5 text-white border-white/20 hover:bg-white/10 hover:border-white/50 shadow-[0_0_15px_rgba(255,255,255,0.05)]'}`}
           >
             <span className="font-semibold">SAY HI</span>
-            <span className={`text-base transition-transform duration-300 origin-bottom-right ${isHovered ? 'rotate-12 scale-110' : 'rotate-0'}`}>👋</span>
+            <motion.span 
+              className="text-base origin-bottom-right inline-block"
+              animate={{ 
+                rotate: isHovered ? [0, 20, -10, 20, -10, 0] : [0, 5, 0, -5, 0] 
+              }}
+              transition={{ 
+                duration: isHovered ? 0.5 : 2.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              👋
+            </motion.span>
           </button>
 
           <div className="relative inline-flex justify-center">

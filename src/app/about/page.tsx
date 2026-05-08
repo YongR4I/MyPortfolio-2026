@@ -15,6 +15,8 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import Link from 'next/link';
+import { useTransition } from '@/context/TransitionContext';
+
 
 const experiencesData = [
   {
@@ -418,6 +420,7 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
 
 export default function AboutPage() {
   const experienceRef = useRef<HTMLDivElement>(null);
+  const { navigateWithTransition } = useTransition();
   const [selectedExp, setSelectedExp] = useState<number | null>(null);
     
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -670,10 +673,13 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="md:w-[36%] flex justify-end items-end mt-12 md:mt-0">
-                <Link href="/contact" className="relative overflow-hidden px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] group transition-colors">
+                <div 
+                  onClick={() => navigateWithTransition("/contact")}
+                  className="relative overflow-hidden px-8 py-2.5 border border-white/10 rounded-full text-white text-[13px] group transition-colors cursor-pointer"
+                >
                   <span className="relative z-10">Let&apos;s Talk</span>
                   <div className="absolute inset-0 bg-[#FF442B] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </Link>
+                </div>
               </div>
             </div>
           </div>
