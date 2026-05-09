@@ -134,14 +134,33 @@ export default function Navbar() {
         {/* Mobile Toggle Button (+) */}
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 text-white"
+          className="md:hidden flex flex-col items-center justify-center w-8 h-8 transition-all duration-300 text-white gap-[5px]"
+          aria-label="Toggle Menu"
         >
           <motion.span
-            animate={{ rotate: isMenuOpen ? 45 : 0 }}
-            className="text-2xl font-light"
-          >
-            +
-          </motion.span>
+            animate={{ 
+              rotate: isMenuOpen ? 45 : 0,
+              y: isMenuOpen ? 6.5 : 0 
+            }}
+            transition={{ duration: 0.3 }}
+            className="w-6 h-[1.5px] bg-white block rounded-full origin-center"
+          />
+          <motion.span
+            animate={{ 
+              opacity: isMenuOpen ? 0 : 1,
+              x: isMenuOpen ? -10 : 0
+            }}
+            transition={{ duration: 0.3 }}
+            className="w-6 h-[1.5px] bg-white block rounded-full"
+          />
+          <motion.span
+            animate={{ 
+              rotate: isMenuOpen ? -45 : 0,
+              y: isMenuOpen ? -6.5 : 0 
+            }}
+            transition={{ duration: 0.3 }}
+            className="w-6 h-[1.5px] bg-white block rounded-full origin-center"
+          />
         </button>
       </nav>
 

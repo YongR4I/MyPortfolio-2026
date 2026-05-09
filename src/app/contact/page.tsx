@@ -38,7 +38,7 @@ export default function ContactPage() {
                 rotate: isHovered ? [0, 20, -10, 20, -10, 0] : [0, 5, 0, -5, 0] 
               }}
               transition={{ 
-                duration: isHovered ? 0.5 : 2.5,
+                duration: isHovered ? 0.4 : 1.2,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
