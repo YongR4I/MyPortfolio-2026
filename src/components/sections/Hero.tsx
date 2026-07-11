@@ -81,12 +81,11 @@ export default function Hero() {
         className="absolute inset-0 z-0 w-full h-full flex items-end justify-center pointer-events-none"
       >
          <Image
-            src="/assets/New Hero.png"   
-            alt="Hero Background Silhouette"
-            fill
-            priority
-            unoptimized
-            className="object-cover object-bottom"
+             src="/assets/New Hero.png"   
+             alt="Hero Background Silhouette"
+             fill
+             priority
+             className="object-cover object-bottom"
             style={{
               objectPosition: 'bottom center',
             }}

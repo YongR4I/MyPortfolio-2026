@@ -129,5 +129,6 @@ body {
 
 .animate-spin-star {
   animation: spin-star 4s linear infinite;
+  will-change: transform;
 }
 

@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+
+const MotionImage = motion(Image);
 
 interface ProjectHeroSliderProps {
   images: string[];
@@ -57,11 +60,12 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
             className="object-cover w-full h-full pointer-events-none"
           />
         ) : (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
+          <Image
             src={images[0]}
             alt={alt}
-            className="object-cover w-full h-full pointer-events-none"
+            fill
+            className="object-cover pointer-events-none"
+            sizes="(max-width: 768px) 100vw, 90vw"
           />
         )}
       </div>
@@ -110,9 +114,11 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
             className="absolute object-cover w-full h-full cursor-grab active:cursor-grabbing"
           />
         ) : (
-          <motion.img
+          <MotionImage
             key={page}
             src={images[imageIndex]}
+            alt={`${alt} image ${imageIndex + 1}`}
+            fill
             custom={direction}
             variants={slideVariants}
             initial="enter"
@@ -125,7 +131,7 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={1}
-            onDragEnd={(e, { offset, velocity }) => {
+            onDragEnd={(_, { offset, velocity }) => {
               const swipe = swipePower(offset.x, velocity.x);
 
               if (swipe < -swipeConfidenceThreshold) {
@@ -134,8 +140,8 @@ export default function ProjectHeroSlider({ images, alt }: ProjectHeroSliderProp
                 paginate(-1);
               }
             }}
-            alt={`${alt} image ${imageIndex + 1}`}
-            className="absolute object-cover w-full h-full cursor-grab active:cursor-grabbing"
+            className="object-cover cursor-grab active:cursor-grabbing"
+            sizes="(max-width: 768px) 100vw, 90vw"
           />
         )}
       </AnimatePresence>

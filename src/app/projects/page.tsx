@@ -19,9 +19,22 @@ const InfiniteSlider = ({ images }: { images: string[] }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = observerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useAnimationFrame((t, delta) => {
-    if (isHovered || isDragging) return;
+    if (isHovered || isDragging || !isVisible) return;
     
     // Constant slow marquee moving left
     const moveBy = -1.5 * (delta / 1000); 
@@ -46,7 +59,8 @@ const InfiniteSlider = ({ images }: { images: string[] }) => {
   };
 
   return (
-    <div 
+    <div
+      ref={observerRef}
       className="w-full relative py-8 md:py-12 border-b border-white/10 overflow-hidden cursor-grab active:cursor-grabbing"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -60,13 +74,13 @@ const InfiniteSlider = ({ images }: { images: string[] }) => {
         onPanEnd={() => setIsDragging(false)}
       >
         {[...images, ...images].map((img, i) => (
-          <div key={i} className="relative shrink-0 overflow-hidden bg-white/5 rounded-[1rem] group">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div key={i} className="relative shrink-0 overflow-hidden bg-white/5 rounded-[1rem] group h-[40vh] md:h-[500px]">
+            <Image
               src={img}
               alt={`Slide ${i}`}
-              className="h-[40vh] md:h-[500px] w-auto object-contain block transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:brightness-110"
-              draggable={false}
+              fill
+              className="object-contain transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:brightness-110"
+              sizes="500px"
             />
             {/* Subtle glow/overlay on hover */}
             <div className="absolute inset-0 border border-white/0 group-hover:border-white/20 transition-colors duration-700 rounded-[1rem] pointer-events-none" />
@@ -124,16 +138,11 @@ export default function ProjectsPage() {
   // Mencegah scroll saat modal terbuka
   useEffect(() => {
     if (selectedProject) {
-      document.body.style.overflow = 'hidden';
-      // Mencegah Lenis dari scrolling
       window.dispatchEvent(new Event('lock-scroll'));
     } else {
-      document.body.style.overflow = 'unset';
-      // Menyalakan Lenis scroll kembali
       window.dispatchEvent(new Event('unlock-scroll'));
     }
     return () => {
-      document.body.style.overflow = 'unset';
       window.dispatchEvent(new Event('unlock-scroll'));
     };
   }, [selectedProject]);
@@ -277,10 +286,12 @@ export default function ProjectsPage() {
                         <div className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1e1e21] border-r border-b border-white/10 rotate-45 -mt-1" />
                       </div>
 
-                      <img 
+                      <Image 
                         src={getTechIconUrl(tech)} 
                         alt={tech} 
-                        className="w-[20px] h-[20px] opacity-60 group-hover/tech:opacity-100 transition-all duration-300" 
+                        width={20}
+                        height={20}
+                        className="opacity-60 group-hover/tech:opacity-100 transition-all duration-300" 
                       />
                     </div>
                   ))}

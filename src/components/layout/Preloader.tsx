@@ -39,19 +39,11 @@ export default function Preloader() {
 
   useEffect(() => {
     if (isVisible) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
       window.dispatchEvent(new CustomEvent('lock-scroll'));
     } else {
-      handleExitComplete();
+      window.dispatchEvent(new CustomEvent('unlock-scroll'));
     }
   }, [isVisible]);
-
-  const handleExitComplete = () => {
-    document.body.style.overflow = '';
-    document.body.style.touchAction = '';
-    window.dispatchEvent(new CustomEvent('unlock-scroll'));
-  };
 
   return (
     <AnimatePresence mode="wait">

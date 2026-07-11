@@ -17,6 +17,8 @@ import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSp
 import Link from 'next/link';
 import { useTransition } from '@/context/TransitionContext';
 
+const MotionImage = motion(Image);
+
 
 const experiencesData = [
   {
@@ -184,8 +186,13 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
     return () => window.clearInterval(id);
   }, [images.join('|')]);
 
+  const scrollRAFRef = useRef<number | null>(null);
   const handleOverlayScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setOverlayScroll(e.currentTarget.scrollTop);
+    if (scrollRAFRef.current) return;
+    scrollRAFRef.current = requestAnimationFrame(() => {
+      setOverlayScroll(e.currentTarget.scrollTop);
+      scrollRAFRef.current = null;
+    });
   };
 
   const scrollHintHideAfter =
@@ -228,13 +235,16 @@ const ExperienceOverlay = ({ item, onClose }: any) => {
           <div className="absolute top-0 left-0 right-0 z-0 w-full pointer-events-none">
             <div className="relative w-full overflow-hidden">
               <AnimatePresence mode="wait" initial={false}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <motion.img
+                <MotionImage
                   key={images[activeImageIndex]}
                   ref={imgRef as any}
                   src={images[activeImageIndex]}
                   alt={item.title}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
                   className="w-full h-auto block origin-center"
+                  style={{ width: '100%', height: 'auto' }}
                   initial={{ opacity: 0, scale: 1 }}
                   animate={{ opacity: 1, scale: 1.05 }}
                   exit={{ opacity: 0 }}
@@ -455,41 +465,12 @@ export default function AboutPage() {
     const isLocked = selectedCert !== null || selectedExp !== null;
 
     if (isLocked) {
-      // Store current scroll position and freeze the body in place
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = '0';
-      document.body.style.right = '0';
-      document.body.style.overflow = 'hidden';
-      // Also stop Lenis
       window.dispatchEvent(new Event('lock-scroll'));
     } else {
-      // Restore scroll position exactly where user was
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
       window.dispatchEvent(new Event('unlock-scroll'));
     }
 
     return () => {
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
       window.dispatchEvent(new Event('unlock-scroll'));
     };
   }, [selectedCert, selectedExp]);
@@ -833,11 +814,13 @@ export default function AboutPage() {
               className="relative shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={certificates[selectedCert].image}
                 alt={certificates[selectedCert].title}
-                className="max-w-[90vw] max-h-[85vh] md:max-w-[1000px] rounded-xl object-contain block shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10"
+                width={1000}
+                height={700}
+                className="max-w-[90vw] max-h-[85vh] md:max-w-[1000px] rounded-xl object-contain shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10"
+                sizes="(max-width: 768px) 90vw, 1000px"
               />
               
               {/* Close Button placed at the top right of the image */}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { projectsData } from '@/data';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
@@ -79,11 +80,12 @@ const ProjectCard = ({
           <div className={`w-full lg:w-[65%] h-[55%] lg:h-full relative rounded-2xl overflow-hidden ${
              'bg-[#18181B]'
           }`}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={project.imagePlaceholder}
               alt={project.title}
-              className="object-cover w-full h-full pointer-events-none"
+              fill
+              className="object-cover pointer-events-none"
+              sizes="(max-width: 1024px) 100vw, 65vw"
             />
           </div>
 
@@ -123,10 +125,12 @@ const ProjectCard = ({
 
                       {/* Icon Container */}
                       <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 group-hover/tech:bg-white/10 group-hover/tech:border-white/20 transition-all duration-300 pointer-events-auto cursor-help">
-                        <img 
+                        <Image 
                           src={getTechIconUrl(tech)} 
                           alt={tech} 
-                          className="w-5 h-5 lg:w-6 lg:h-6 object-contain opacity-60 group-hover/tech:opacity-100 transition-opacity"
+                          width={24}
+                          height={24}
+                          className="object-contain opacity-60 group-hover/tech:opacity-100 transition-opacity"
                         />
                       </div>
                     </div>
@@ -154,6 +158,8 @@ export default function Projects() {
 
   // State untuk melacak apakah cursor berada di area kartu proyek
   const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInsideRef = useRef(false);
 
   // Menyimpan posisi mouse X dan Y menggunakan Framer Motion value
   const mouseX = useMotionValue(0);
@@ -165,20 +171,26 @@ export default function Projects() {
   const cursorY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    // Fungsi untuk memperbarui nilai X dan Y mouse setiap kali bergerak
+    const container = containerRef.current;
+
     const moveCursor = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      isInsideRef.current = (
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+      );
+      if (isInsideRef.current) {
+        mouseX.set(e.clientX);
+        mouseY.set(e.clientY);
+      }
     };
 
-    // Fungsi untuk memastikan kursor mati jika di-scroll keluar area section
     const handleScroll = () => {
-      if (typeof window !== 'undefined') {
-        const el = document.elementFromPoint(mouseX.get(), mouseY.get());
-        // Jika elemen di bawah mouse BUKAN bagian dari salah satu section project, sembunyikan kursor kustom
-        if (!el?.closest('[id^="project-section-"]')) {
-          setIsHovered(false);
-        }
+      if (!isInsideRef.current) {
+        setIsHovered(false);
       }
     };
 
@@ -193,7 +205,7 @@ export default function Projects() {
 
   return (
     <>
-      <div id="projects-container">
+      <div id="projects-container" ref={containerRef}>
         {/* Label Header Global (Hanya tampil sekali di paling atas) */}
       <div className="relative pt-12 pb-6 px-6 md:px-12 lg:px-20 bg-[#18181B]">
         <span className="text-[#FF442B] font-['Inter_Display'] text-[14px] uppercase tracking-wider">

@@ -2,11 +2,10 @@
 
 import Navbar from "@/components/layout/Navbar";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import ContactFormSection from "@/components/sections/ContactFormSection";
 import Footer from "@/components/layout/Footer";
-import { AnimatePresence } from "framer-motion";
 
 export default function ContactPage() {
   const [isHovered, setIsHovered] = useState(false);
